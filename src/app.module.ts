@@ -16,9 +16,14 @@ import { ArtistModule } from './entities/artist/artist.module';
 import { TrackModule } from './entities/track/track.module';
 import { AlbumModule } from './entities/album/album.module';
 import { FavoritesModule } from './entities/favorites/favorites.module';
+import { UsersModule } from './users/users.module';
+import { ArtistsModule } from './artists/artists.module';
+import { TracksModule } from './tracks/tracks.module';
+import { AlbumsModule } from './albums/albums.module';
+import { FavoritesModule } from './favorites/favorites.module';
 
 @Module({
-  imports: [UserModule, ArtistModule, TrackModule, AlbumModule, FavoritesModule],
+  imports: [UserModule, ArtistModule, TrackModule, AlbumModule, FavoritesModule, UsersModule, ArtistsModule, TracksModule, AlbumsModule],
   controllers: [AppController, UserController, ArtistController, TrackController, AlbumController, FavoritesController],
   providers: [AppService, UserService, ArtistService, TrackService, AlbumService, FavoritesService],
 })
