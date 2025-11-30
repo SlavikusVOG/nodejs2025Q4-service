@@ -3,4 +3,9 @@ export class Album {
   name: string;
   year: number;
   artistId: string | null; // refers to Artist
+
+  constructor(partial: Partial<Album>) {
+    Object.assign(this, partial);
+    this.id = crypto.randomUUID();
+  }
 }
