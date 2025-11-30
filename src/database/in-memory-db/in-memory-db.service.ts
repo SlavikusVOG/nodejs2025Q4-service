@@ -14,7 +14,7 @@ export class InMemoryDbService implements Database {
   private tracks = new Map<string, Track>();
   private favorites = new Favorite();
 
-  createUser(data: Omit<User, 'id' | 'version' | 'createdAt' | 'updatedAt'>) {
+  createUser(data: Pick<User, 'login' | 'password'>) {
     const user = new User(data);
     this.users.set(user.id, user);
     return user;
@@ -101,18 +101,18 @@ export class InMemoryDbService implements Database {
     return track;
   }
 
-  getTrack(id: string) {
+  findTrack(id: string) {
     const track = this.tracks.get(id);
     return track;
   }
 
-  getAllTracks() {
+  findAllTracks() {
     const result = Array.from(this.tracks.values());
     return result;
   }
 
   updateTrack(id: string, data: Partial<Track>) {
-    const track = this.getTrack(id);
+    const track = this.findTrack(id);
     if (track) {
       Object.assign(track, data);
       return track;
@@ -131,12 +131,12 @@ export class InMemoryDbService implements Database {
     return album;
   }
 
-  getAlbum(id: string) {
+  findAlbum(id: string) {
     const album = this.albums.get(id);
     return album;
   }
 
-  getAllAlbums() {
+  findAllAlbums() {
     const result = Array.from(this.albums.values());
     return result;
   }
@@ -158,39 +158,36 @@ export class InMemoryDbService implements Database {
     });
   }
 
-  getFavoriteAlbums() {
+  findFavoriteAlbums() {
     return this.favorites.albums;
   }
 
-  addFavoriteAlbums(data: Album[]) {
-    const ids = data.map((d) => d.id);
-    this.favorites.albums.push(...ids);
+  addFavoriteAlbum(id: string) {
+    this.favorites.albums.push(id);
   }
 
   deleteFavoriteAlbum(id: string) {
     this.favorites.albums = this.favorites.albums.filter((aId) => aId !== id);
   }
 
-  getFavoriteArtists() {
+  findFavoriteArtists() {
     return this.favorites.artists;
   }
 
-  addFavoriteArtists(data: Artist[]) {
-    const ids = data.map((d) => d.id);
-    this.favorites.artists.push(...ids);
+  addFavoriteArtists(id: string) {
+    this.favorites.artists.push(id);
   }
 
   deleteFavoriteArtist(id: string) {
     this.favorites.artists = this.favorites.artists.filter((aId) => aId !== id);
   }
 
-  getFavoriteTracks() {
+  findFavoriteTracks() {
     return this.favorites.tracks;
   }
 
-  addFavoriteTracks(data: Track[]) {
-    const ids = data.map((d) => d.id);
-    this.favorites.tracks.push(...ids);
+  addFavoriteTrack(id: string) {
+    this.favorites.tracks.push(id);
   }
 
   deleteFavoriteTrack(id: string) {

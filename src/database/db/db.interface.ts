@@ -4,9 +4,7 @@ import { Track } from 'src/tracks/entities/track.entity';
 import { User } from 'src/users/entities/user.entity';
 
 export interface Database {
-  createUser(
-    data: Omit<User, 'id' | 'version' | 'createdAt' | 'updatedAt'>,
-  ): User;
+  createUser(data: Pick<User, 'login' | 'password'>): User;
 
   findUser(id: string): User;
 
@@ -34,9 +32,9 @@ export interface Database {
 
   createTrack(data: Omit<Track, 'id'>): Track;
 
-  getTrack(id: string): Track;
+  findTrack(id: string): Track;
 
-  getAllTracks(): Track[];
+  findAllTracks(): Track[];
 
   updateTrack(id: string, data: Partial<Track>): Track;
 
@@ -44,29 +42,29 @@ export interface Database {
 
   createAlbum(data: Omit<Album, 'id'>): Album;
 
-  getAlbum(id: string): Album;
+  findAlbum(id: string): Album;
 
-  getAllAlbums(): Album[];
+  findAllAlbums(): Album[];
 
   updateAlbum(id: string, data: Partial<Album>): Album;
 
   deleteAlbum(id: string);
 
-  getFavoriteAlbums(): string[];
+  findFavoriteAlbums(): string[];
 
-  addFavoriteAlbums(data: Album[]);
+  addFavoriteAlbum(id: string);
 
-  deleteFavoriteAlbum(ids: string);
+  deleteFavoriteAlbum(id: string);
 
-  getFavoriteArtists(): string[];
+  findFavoriteArtists(): string[];
 
-  addFavoriteArtists(data: Artist[]);
+  addFavoriteArtists(id: string);
 
-  deleteFavoriteArtist(ids: string);
+  deleteFavoriteArtist(id: string);
 
-  getFavoriteTracks(): string[];
+  findFavoriteTracks(): string[];
 
-  addFavoriteTracks(data: Track[]);
+  addFavoriteTrack(id: string);
 
-  deleteFavoriteTrack(ids: string);
+  deleteFavoriteTrack(id: string);
 }

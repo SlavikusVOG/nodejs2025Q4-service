@@ -1,26 +1,33 @@
 import { Injectable } from '@nestjs/common';
 import { CreateAlbumDto } from './dto/create-album.dto';
 import { UpdateAlbumDto } from './dto/update-album.dto';
+import { Database } from 'src/database/db/db.interface';
+import { InMemoryDbService } from 'src/database/in-memory-db/in-memory-db.service';
 
 @Injectable()
 export class AlbumsService {
+  db: Database = new InMemoryDbService();
   create(createAlbumDto: CreateAlbumDto) {
-    return 'This action adds a new album';
+    const result = this.db.createAlbum(createAlbumDto);
+    return result;
   }
 
   findAll() {
-    return `This action returns all albums`;
+    const result = this.db.findAllAlbums();
+    return result;
   }
 
-  findOne(id: number) {
-    return `This action returns a #${id} album`;
+  findOne(id: string) {
+    const result = this.db.findAlbum(id);
+    return result;
   }
 
-  update(id: number, updateAlbumDto: UpdateAlbumDto) {
-    return `This action updates a #${id} album`;
+  update(id: string, updateAlbumDto: UpdateAlbumDto) {
+    const result = this.db.updateAlbum(id, updateAlbumDto);
+    return result;
   }
 
-  remove(id: number) {
-    return `This action removes a #${id} album`;
+  remove(id: string) {
+    this.db.deleteAlbum(id);
   }
 }

@@ -1,26 +1,33 @@
 import { Injectable } from '@nestjs/common';
 import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
+import { Database } from 'src/database/db/db.interface';
+import { InMemoryDbService } from 'src/database/in-memory-db/in-memory-db.service';
 
 @Injectable()
 export class UsersService {
+  db: Database = new InMemoryDbService();
   create(createUserDto: CreateUserDto) {
-    return 'This action adds a new user';
+    const result = this.db.createUser(createUserDto);
+    return result;
   }
 
   findAll() {
-    return `This action returns all users`;
+    const result = this.db.findAllUsers();
+    return result;
   }
 
-  findOne(id: number) {
-    return `This action returns a #${id} user`;
+  findOne(id: string) {
+    const result = this.db.findUser(id);
+    return result;
   }
 
-  update(id: number, updateUserDto: UpdateUserDto) {
-    return `This action updates a #${id} user`;
+  update(id: string, updateUserDto: UpdateUserDto) {
+    const result = this.db.updateUser(id, updateUserDto);
+    return result;
   }
 
-  remove(id: number) {
-    return `This action removes a #${id} user`;
+  remove(id: string) {
+    this.db.deleteUser(id);
   }
 }

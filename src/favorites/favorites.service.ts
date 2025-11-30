@@ -1,26 +1,40 @@
 import { Injectable } from '@nestjs/common';
-import { CreateFavoriteDto } from './dto/create-favorite.dto';
-import { UpdateFavoriteDto } from './dto/update-favorite.dto';
+import { Database } from 'src/database/db/db.interface';
+import { InMemoryDbService } from 'src/database/in-memory-db/in-memory-db.service';
 
 @Injectable()
 export class FavoritesService {
-  create(createFavoriteDto: CreateFavoriteDto) {
-    return 'This action adds a new favorite';
+  db: Database = new InMemoryDbService();
+  addAlbum(id: string) {
+    const album = this.db.findAlbum(id);
+    if (album) {
+      this.db.addFavoriteAlbum(id);
+    }
   }
 
-  findAll() {
-    return `This action returns all favorites`;
+  addArtist(id: string) {
+    const artist = this.db.findArtist(id);
+    if (artist) {
+      this.db.addFavoriteArtists(id);
+    }
   }
 
-  findOne(id: number) {
-    return `This action returns a #${id} favorite`;
+  addTrack(id: string) {
+    const track = this.db.findTrack(id);
+    if (track) {
+      this.db.addFavoriteTrack(id);
+    }
   }
 
-  update(id: number, updateFavoriteDto: UpdateFavoriteDto) {
-    return `This action updates a #${id} favorite`;
+  removeAlbum(id: string) {
+    this.db.deleteFavoriteAlbum(id);
   }
 
-  remove(id: number) {
-    return `This action removes a #${id} favorite`;
+  removeArtist(id: string) {
+    this.db.deleteFavoriteArtist(id);
+  }
+
+  removeTrack(id: string) {
+    this.db.deleteFavoriteTrack(id);
   }
 }

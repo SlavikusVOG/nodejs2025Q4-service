@@ -1,26 +1,33 @@
 import { Injectable } from '@nestjs/common';
 import { CreateArtistDto } from './dto/create-artist.dto';
 import { UpdateArtistDto } from './dto/update-artist.dto';
+import { Database } from 'src/database/db/db.interface';
+import { InMemoryDbService } from 'src/database/in-memory-db/in-memory-db.service';
 
 @Injectable()
 export class ArtistsService {
+  db: Database = new InMemoryDbService();
   create(createArtistDto: CreateArtistDto) {
-    return 'This action adds a new artist';
+    const result = this.db.createArtist(createArtistDto);
+    return result;
   }
 
   findAll() {
-    return `This action returns all artists`;
+    const result = this.db.findAllArtists();
+    return result;
   }
 
-  findOne(id: number) {
-    return `This action returns a #${id} artist`;
+  findOne(id: string) {
+    const result = this.db.findArtist(id);
+    return result;
   }
 
-  update(id: number, updateArtistDto: UpdateArtistDto) {
-    return `This action updates a #${id} artist`;
+  update(id: string, updateArtistDto: UpdateArtistDto) {
+    const result = this.db.updateArtist(id, updateArtistDto);
+    return result;
   }
 
-  remove(id: number) {
-    return `This action removes a #${id} artist`;
+  remove(id: string) {
+    this.db.deleteArtist(id);
   }
 }
