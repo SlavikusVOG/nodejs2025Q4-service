@@ -20,13 +20,7 @@ import { FavoritesModule } from './favorites/favorites.module';
     TracksModule,
     AlbumsModule,
   ],
-  controllers: [
-    AppController,
-    AbortController,
-    AppController,
-    AppController,
-    AbortController,
-  ],
+  controllers: [AppController, AppController, AppController],
   providers: [AppService],
 })
 export class AppModule {}
