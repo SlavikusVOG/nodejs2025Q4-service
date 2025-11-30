@@ -7,6 +7,8 @@ import { ArtistsModule } from './artists/artists.module';
 import { TracksModule } from './tracks/tracks.module';
 import { AlbumsModule } from './albums/albums.module';
 import { FavoritesModule } from './favorites/favorites.module';
+import { DbService } from './database/db/db.service';
+import { InMemoryDbService } from './database/in-memory-db/in-memory-db.service';
 
 @Module({
   imports: [
@@ -21,6 +23,6 @@ import { FavoritesModule } from './favorites/favorites.module';
     AlbumsModule,
   ],
   controllers: [AppController, AppController, AppController],
-  providers: [AppService],
+  providers: [AppService, DbService, InMemoryDbService],
 })
 export class AppModule {}
