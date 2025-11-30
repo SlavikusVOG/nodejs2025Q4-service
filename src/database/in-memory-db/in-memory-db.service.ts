@@ -4,9 +4,10 @@ import { Artist } from 'src/artists/entities/artist.entity';
 import { Favorite } from 'src/favorites/entities/favorite.entity';
 import { Track } from 'src/tracks/entities/track.entity';
 import { User } from 'src/users/entities/user.entity';
+import { Database } from '../db/db.interface';
 
 @Injectable()
-export class InMemoryDbService {
+export class InMemoryDbService implements Database {
   private users = new Map<string, User>();
   private artists = new Map<string, Artist>();
   private albums = new Map<string, Album>();
@@ -166,6 +167,10 @@ export class InMemoryDbService {
     this.favorites.albums.push(...ids);
   }
 
+  deleteFavoriteAlbum(id: string) {
+    this.favorites.albums = this.favorites.albums.filter((aId) => aId !== id);
+  }
+
   getFavoriteArtists() {
     return this.favorites.artists;
   }
@@ -175,12 +180,20 @@ export class InMemoryDbService {
     this.favorites.artists.push(...ids);
   }
 
+  deleteFavoriteArtist(id: string) {
+    this.favorites.artists = this.favorites.artists.filter((aId) => aId !== id);
+  }
+
   getFavoriteTracks() {
     return this.favorites.tracks;
   }
 
-  addFavoriteTrack(data: Track[]) {
+  addFavoriteTracks(data: Track[]) {
     const ids = data.map((d) => d.id);
     this.favorites.tracks.push(...ids);
+  }
+
+  deleteFavoriteTrack(id: string) {
+    this.favorites.tracks = this.favorites.tracks.filter((tId) => tId !== id);
   }
 }
