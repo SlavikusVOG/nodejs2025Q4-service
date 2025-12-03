@@ -50,6 +50,7 @@ export class InMemoryDbService implements Database {
     if (user) {
       if (user.password === oldPassword) {
         user.updatePassword(oldPassword, newPassword);
+        user.version += 1;
         return true;
       }
       throw new Error('403');

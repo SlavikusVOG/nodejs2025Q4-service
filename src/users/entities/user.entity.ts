@@ -16,6 +16,7 @@ export class User {
     this.id = crypto.randomUUID();
     this.createdAt = this.createdAt ?? Date.now();
     this.updatedAt = this.updatedAt ?? Date.now();
+    this.version = 1;
   }
 
   updatePassword(oldPassword: string, newPassword: string): boolean {
