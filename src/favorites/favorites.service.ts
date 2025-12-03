@@ -23,24 +23,27 @@ export class FavoritesService {
     const album = this.db.findAlbum(id);
     if (album) {
       this.db.addFavoriteAlbum(id);
+      return album;
     }
-    return album;
+    throw new Error('422');
   }
 
   addArtist(id: string) {
     const artist = this.db.findArtist(id);
     if (artist) {
       this.db.addFavoriteArtists(id);
+      return artist;
     }
-    return artist;
+    throw new Error('422');
   }
 
   addTrack(id: string) {
     const track = this.db.findTrack(id);
     if (track) {
       this.db.addFavoriteTrack(id);
+      return track;
     }
-    return track;
+    throw new Error('422');
   }
 
   removeAlbum(id: string) {
