@@ -1,10 +1,10 @@
-import { Injectable } from '@nestjs/common';
+import { Inject, Injectable } from '@nestjs/common';
 import { Database } from 'src/database/db/db.interface';
 import { InMemoryDbService } from 'src/database/in-memory-db/in-memory-db.service';
 
 @Injectable()
 export class FavoritesService {
-  db: Database = new InMemoryDbService();
+  constructor(@Inject('DB') private db: InMemoryDbService) {}
   getAllFavorites() {
     const artistIds = this.db.findFavoriteArtists();
     const albumIds = this.db.findFavoriteAlbums();
@@ -24,6 +24,7 @@ export class FavoritesService {
     if (album) {
       this.db.addFavoriteAlbum(id);
     }
+    return album;
   }
 
   addArtist(id: string) {
@@ -31,6 +32,7 @@ export class FavoritesService {
     if (artist) {
       this.db.addFavoriteArtists(id);
     }
+    return artist;
   }
 
   addTrack(id: string) {
@@ -38,6 +40,7 @@ export class FavoritesService {
     if (track) {
       this.db.addFavoriteTrack(id);
     }
+    return track;
   }
 
   removeAlbum(id: string) {

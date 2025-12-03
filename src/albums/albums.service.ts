@@ -1,12 +1,11 @@
-import { Injectable } from '@nestjs/common';
+import { Inject, Injectable } from '@nestjs/common';
 import { CreateAlbumDto } from './dto/create-album.dto';
 import { UpdateAlbumDto } from './dto/update-album.dto';
 import { Database } from 'src/database/db/db.interface';
-import { InMemoryDbService } from 'src/database/in-memory-db/in-memory-db.service';
 
 @Injectable()
 export class AlbumsService {
-  db: Database = new InMemoryDbService();
+  constructor(@Inject('DB') private db: Database) {}
   create(createAlbumDto: CreateAlbumDto) {
     const result = this.db.createAlbum(createAlbumDto);
     return result;

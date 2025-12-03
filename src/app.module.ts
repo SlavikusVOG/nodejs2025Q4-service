@@ -22,6 +22,13 @@ import { InMemoryDbService } from './database/in-memory-db/in-memory-db.service'
     AlbumsModule,
   ],
   controllers: [AppController, AppController, AppController],
-  providers: [AppService, InMemoryDbService],
+  providers: [
+    AppService,
+    InMemoryDbService,
+    {
+      provide: 'DB',
+      useClass: InMemoryDbService,
+    },
+  ],
 })
 export class AppModule {}

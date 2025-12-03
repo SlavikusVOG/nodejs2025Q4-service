@@ -29,7 +29,10 @@ export class FavoritesController {
   @HttpCode(201)
   addTrack(@Param('id', ParseUUIDPipe) id: string) {
     try {
-      return this.favoritesService.addTrack(id);
+      const result = this.favoritesService.addTrack(id);
+      if (result) {
+        return result;
+      }
     } catch (error) {
       if (error.message === `${HttpStatus.UNPROCESSABLE_ENTITY}`) {
         throw new HttpException(
@@ -60,7 +63,10 @@ export class FavoritesController {
   @HttpCode(201)
   addAlbum(@Param('id', ParseUUIDPipe) id: string) {
     try {
-      return this.favoritesService.addAlbum(id);
+      const result = this.favoritesService.addAlbum(id);
+      if (result) {
+        return result;
+      }
     } catch (error) {
       if (error.message === `${HttpStatus.UNPROCESSABLE_ENTITY}`) {
         throw new HttpException(
@@ -91,7 +97,10 @@ export class FavoritesController {
   @HttpCode(201)
   addArtist(@Param('id', ParseUUIDPipe) id: string) {
     try {
-      return this.favoritesService.addArtist(id);
+      const result = this.favoritesService.addArtist(id);
+      if (result) {
+        return result;
+      }
     } catch (error) {
       if (error.message === `${HttpStatus.UNPROCESSABLE_ENTITY}`) {
         throw new HttpException(
@@ -108,7 +117,8 @@ export class FavoritesController {
   @HttpCode(204)
   removeArtist(@Param('id', ParseUUIDPipe) id: string) {
     try {
-      return this.favoritesService.removeArtist(id);
+      const result = this.favoritesService.removeArtist(id);
+      return result;
     } catch (error) {
       if (error.message === `${HttpStatus.NOT_FOUND}`) {
         throw new HttpException('Not Found', HttpStatus.NOT_FOUND);

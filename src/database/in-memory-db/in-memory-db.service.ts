@@ -89,15 +89,19 @@ export class InMemoryDbService implements Database {
   }
 
   deleteArtist(id: string) {
-    const result = this.artists.delete(id);
     this.favorites.artists = this.favorites.artists.filter((aId) => aId !== id);
 
-    this.albums.forEach((a) => {
-      if (a.artistId === id) a.artistId = null;
+    const albums = this.findAllAlbums();
+    const artistAlbums = albums.filter(a => a.artistId === id);
+    artistAlbums.forEach((a) => {
+        this.updateAlbum(a.id, { artistId: null });
     });
-    this.tracks.forEach((t) => {
-      if (t.artistId === id) t.artistId = null;
-    });
+
+    const tracks = this.findAllTracks();
+    tracks.forEach((t) => {
+      this.updateTrack(t.id, { artistId: null });
+    })
+    const result = this.artists.delete(id);
     return result;
   }
 
@@ -158,11 +162,13 @@ export class InMemoryDbService implements Database {
   }
 
   deleteAlbum(id: string) {
-    const result = this.albums.delete(id);
     this.favorites.albums = this.favorites.albums.filter((aId) => aId !== id);
-    this.tracks.forEach((t) => {
-      if (t.albumId === id) t.albumId = null;
+    const tracks = this.findAllTracks();
+    const albumTracks = tracks.filter(t => t.albumId === id);
+    albumTracks.forEach((t) => {
+      this.updateTrack(t.id, { albumId: null });
     });
+    const result = this.albums.delete(id);
     return result;
   }
 

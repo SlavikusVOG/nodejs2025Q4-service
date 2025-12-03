@@ -1,12 +1,11 @@
-import { Injectable } from '@nestjs/common';
+import { Inject, Injectable } from '@nestjs/common';
 import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto, UpdateUserPasswordDto } from './dto/update-user.dto';
-import { Database } from 'src/database/db/db.interface';
 import { InMemoryDbService } from 'src/database/in-memory-db/in-memory-db.service';
 
 @Injectable()
 export class UsersService {
-  db: Database = new InMemoryDbService();
+  constructor(@Inject('DB') private db: InMemoryDbService) {}
   create(createUserDto: CreateUserDto) {
     const result = this.db.createUser(createUserDto);
     return result;
