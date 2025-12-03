@@ -170,11 +170,22 @@ export class InMemoryDbService implements Database {
   }
 
   addFavoriteAlbum(id: string) {
-    this.favorites.albums.push(id);
+    if (this.albums.get(id)) {
+      this.favorites.albums.push(id);
+      return true;
+    }
+    throw new Error('422');
   }
 
   deleteFavoriteAlbum(id: string) {
-    this.favorites.albums = this.favorites.albums.filter((aId) => aId !== id);
+    if (this.albums.get(id)) {
+      this.favorites.albums = this.favorites.albums.filter((aId) => aId !== id);
+      this.favorites.artists = this.favorites.artists.filter(
+        (aId) => aId !== id,
+      );
+      return true;
+    }
+    throw new Error('404');
   }
 
   findFavoriteArtists() {
@@ -182,11 +193,21 @@ export class InMemoryDbService implements Database {
   }
 
   addFavoriteArtists(id: string) {
-    this.favorites.artists.push(id);
+    if (this.artists.get(id)) {
+      this.favorites.artists.push(id);
+      return true;
+    }
+    throw new Error('422');
   }
 
   deleteFavoriteArtist(id: string) {
-    this.favorites.artists = this.favorites.artists.filter((aId) => aId !== id);
+    if (this.artists.get(id)) {
+      this.favorites.artists = this.favorites.artists.filter(
+        (aId) => aId !== id,
+      );
+      return true;
+    }
+    throw new Error('404');
   }
 
   findFavoriteTracks() {
@@ -194,10 +215,18 @@ export class InMemoryDbService implements Database {
   }
 
   addFavoriteTrack(id: string) {
-    this.favorites.tracks.push(id);
+    if (this.tracks.get(id)) {
+      this.favorites.tracks.push(id);
+      return true;
+    }
+    throw new Error('422');
   }
 
   deleteFavoriteTrack(id: string) {
-    this.favorites.tracks = this.favorites.tracks.filter((tId) => tId !== id);
+    if (this.tracks.get(id)) {
+      this.favorites.tracks = this.favorites.tracks.filter((tId) => tId !== id);
+      return true;
+    }
+    throw new Error('404');
   }
 }

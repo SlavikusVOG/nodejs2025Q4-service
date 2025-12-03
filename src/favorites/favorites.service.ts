@@ -5,6 +5,20 @@ import { InMemoryDbService } from 'src/database/in-memory-db/in-memory-db.servic
 @Injectable()
 export class FavoritesService {
   db: Database = new InMemoryDbService();
+  getAllFavorites() {
+    const artistIds = this.db.findFavoriteArtists();
+    const albumIds = this.db.findFavoriteAlbums();
+    const trackIds = this.db.findFavoriteTracks();
+    const artists = artistIds.map((id) => this.db.findArtist(id));
+    const albums = albumIds.map((id) => this.db.findAlbum(id));
+    const tracks = trackIds.map((id) => this.db.findTrack(id));
+    return {
+      artists,
+      albums,
+      tracks,
+    };
+  }
+
   addAlbum(id: string) {
     const album = this.db.findAlbum(id);
     if (album) {

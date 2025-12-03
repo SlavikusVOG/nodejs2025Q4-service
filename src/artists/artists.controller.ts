@@ -72,6 +72,7 @@ export class ArtistsController {
   }
 
   @Delete(':id')
+  @HttpCode(204)
   remove(@Param('id') id: string) {
     try {
       const result = this.artistsService.remove(id);
