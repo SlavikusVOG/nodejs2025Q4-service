@@ -88,7 +88,7 @@ export class InMemoryDbService implements Database {
   }
 
   deleteArtist(id: string) {
-    this.artists.delete(id);
+    const result = this.artists.delete(id);
     this.favorites.artists = this.favorites.artists.filter((aId) => aId !== id);
 
     this.albums.forEach((a) => {
@@ -97,6 +97,7 @@ export class InMemoryDbService implements Database {
     this.tracks.forEach((t) => {
       if (t.artistId === id) t.artistId = null;
     });
+    return result;
   }
 
   createTrack(data: Omit<Track, 'id'>) {
@@ -125,8 +126,9 @@ export class InMemoryDbService implements Database {
   }
 
   deleteTrack(id: string) {
-    this.tracks.delete(id);
+    const result = this.tracks.delete(id);
     this.favorites.tracks = this.favorites.tracks.filter((tId) => tId !== id);
+    return result;
   }
 
   createAlbum(data: Omit<Album, 'id'>) {
@@ -155,11 +157,12 @@ export class InMemoryDbService implements Database {
   }
 
   deleteAlbum(id: string) {
-    this.albums.delete(id);
+    const result = this.albums.delete(id);
     this.favorites.albums = this.favorites.albums.filter((aId) => aId !== id);
     this.tracks.forEach((t) => {
       if (t.albumId === id) t.albumId = null;
     });
+    return result;
   }
 
   findFavoriteAlbums() {

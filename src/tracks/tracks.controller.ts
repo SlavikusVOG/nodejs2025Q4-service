@@ -3,9 +3,11 @@ import {
   Get,
   Post,
   Body,
-  Patch,
   Param,
   Delete,
+  HttpException,
+  HttpStatus,
+  Put,
 } from '@nestjs/common';
 import { TracksService } from './tracks.service';
 import { CreateTrackDto } from './dto/create-track.dto';
@@ -17,7 +19,15 @@ export class TracksController {
 
   @Post()
   create(@Body() createTrackDto: CreateTrackDto) {
-    return this.tracksService.create(createTrackDto);
+    try {
+      const track = this.tracksService.create(createTrackDto);
+      if (track) {
+        return track;
+      }
+      throw new Error();
+    } catch {
+      throw new HttpException('Bad Request', HttpStatus.BAD_REQUEST);
+    }
   }
 
   @Get()
@@ -27,16 +37,51 @@ export class TracksController {
 
   @Get(':id')
   findOne(@Param('id') id: string) {
-    return this.tracksService.findOne(id);
+    try {
+      const track = this.tracksService.findOne(id);
+      if (track) {
+        return track;
+      }
+      throw new Error(`${HttpStatus.NOT_FOUND}`);
+    } catch (error) {
+      if (error.message === `${HttpStatus.NOT_FOUND}`) {
+        throw new HttpException('Not Found', HttpStatus.NOT_FOUND);
+      }
+      throw new HttpException('Bad Request', HttpStatus.BAD_REQUEST);
+    }
   }
 
-  @Patch(':id')
+  @Put(':id')
   update(@Param('id') id: string, @Body() updateTrackDto: UpdateTrackDto) {
-    return this.tracksService.update(id, updateTrackDto);
+    try {
+      const result = this.tracksService.update(id, updateTrackDto);
+      if (result) {
+        return result;
+      }
+    } catch (error) {
+      if (error.message === `${HttpStatus.NOT_FOUND}`) {
+        throw new HttpException('Not Found', HttpStatus.NOT_FOUND);
+      }
+      if (error.message === `${HttpStatus.FORBIDDEN}`) {
+        throw new HttpException('Forbidden', HttpStatus.FORBIDDEN);
+      }
+      throw new HttpException('Bad Request', HttpStatus.BAD_REQUEST);
+    }
   }
 
   @Delete(':id')
   remove(@Param('id') id: string) {
-    return this.tracksService.remove(id);
+    try {
+      const result = this.tracksService.remove(id);
+      if (result) {
+        return true;
+      }
+      throw new Error(`${HttpStatus.NOT_FOUND}`);
+    } catch (error) {
+      if (error.message === `${HttpStatus.NOT_FOUND}`) {
+        throw new HttpException('Not Found', HttpStatus.NOT_FOUND);
+      }
+      throw new HttpException('Bad Request', HttpStatus.BAD_REQUEST);
+    }
   }
 }

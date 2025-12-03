@@ -28,6 +28,7 @@ export class TracksService {
   }
 
   remove(id: string) {
-    this.db.deleteTrack(id);
+    const result = this.db.deleteTrack(id);
+    return result;
   }
 }

@@ -28,7 +28,7 @@ export interface Database {
 
   updateArtist(id: string, data: Partial<Artist>): Artist;
 
-  deleteArtist(id: string);
+  deleteArtist(id: string): boolean;
 
   createTrack(data: Omit<Track, 'id'>): Track;
 
@@ -38,7 +38,7 @@ export interface Database {
 
   updateTrack(id: string, data: Partial<Track>): Track;
 
-  deleteTrack(id: string);
+  deleteTrack(id: string): boolean;
 
   createAlbum(data: Omit<Album, 'id'>): Album;
 
@@ -48,7 +48,7 @@ export interface Database {
 
   updateAlbum(id: string, data: Partial<Album>): Album;
 
-  deleteAlbum(id: string);
+  deleteAlbum(id: string): boolean;
 
   findFavoriteAlbums(): string[];
 
