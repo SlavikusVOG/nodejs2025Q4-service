@@ -61,7 +61,10 @@ export class TracksController {
 
   @UseInterceptors(ClassSerializerInterceptor)
   @Put(':id')
-  update(@Param('id', ParseUUIDPipe) id: string, @Body() updateTrackDto: UpdateTrackDto) {
+  update(
+    @Param('id', ParseUUIDPipe) id: string,
+    @Body() updateTrackDto: UpdateTrackDto,
+  ) {
     try {
       const result = this.tracksService.update(id, updateTrackDto);
       if (result) {
