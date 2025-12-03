@@ -3,9 +3,12 @@ import {
   Get,
   Post,
   Body,
-  Patch,
   Param,
   Delete,
+  HttpException,
+  HttpStatus,
+  Put,
+  HttpCode,
 } from '@nestjs/common';
 import { AlbumsService } from './albums.service';
 import { CreateAlbumDto } from './dto/create-album.dto';
@@ -16,8 +19,17 @@ export class AlbumsController {
   constructor(private readonly albumsService: AlbumsService) {}
 
   @Post()
+  @HttpCode(201)
   create(@Body() createAlbumDto: CreateAlbumDto) {
-    return this.albumsService.create(createAlbumDto);
+    try {
+      const album = this.albumsService.create(createAlbumDto);
+      if (album) {
+        return album;
+      }
+      throw new Error();
+    } catch {
+      throw new HttpException('Bad Request', HttpStatus.BAD_REQUEST);
+    }
   }
 
   @Get()
@@ -27,16 +39,52 @@ export class AlbumsController {
 
   @Get(':id')
   findOne(@Param('id') id: string) {
-    return this.albumsService.findOne(id);
+    try {
+      const album = this.albumsService.findOne(id);
+      if (album) {
+        return album;
+      }
+      throw new Error(`${HttpStatus.NOT_FOUND}`);
+    } catch (error) {
+      if (error.message === `${HttpStatus.NOT_FOUND}`) {
+        throw new HttpException('Not Found', HttpStatus.NOT_FOUND);
+      }
+      throw new HttpException('Bad Request', HttpStatus.BAD_REQUEST);
+    }
   }
 
-  @Patch(':id')
+  @Put(':id')
   update(@Param('id') id: string, @Body() updateAlbumDto: UpdateAlbumDto) {
-    return this.albumsService.update(id, updateAlbumDto);
+    try {
+      const result = this.albumsService.update(id, updateAlbumDto);
+      if (result) {
+        return result;
+      }
+    } catch (error) {
+      if (error.message === `${HttpStatus.NOT_FOUND}`) {
+        throw new HttpException('Not Found', HttpStatus.NOT_FOUND);
+      }
+      if (error.message === `${HttpStatus.FORBIDDEN}`) {
+        throw new HttpException('Forbidden', HttpStatus.FORBIDDEN);
+      }
+      throw new HttpException('Bad Request', HttpStatus.BAD_REQUEST);
+    }
   }
 
   @Delete(':id')
+  @HttpCode(204)
   remove(@Param('id') id: string) {
-    return this.albumsService.remove(id);
+    try {
+      const result = this.albumsService.remove(id);
+      if (result) {
+        return true;
+      }
+      throw new Error(`${HttpStatus.NOT_FOUND}`);
+    } catch (error) {
+      if (error.message === `${HttpStatus.NOT_FOUND}`) {
+        throw new HttpException('Not Found', HttpStatus.NOT_FOUND);
+      }
+      throw new HttpException('Bad Request', HttpStatus.BAD_REQUEST);
+    }
   }
 }

@@ -28,6 +28,7 @@ export class AlbumsService {
   }
 
   remove(id: string) {
-    this.db.deleteAlbum(id);
+    const result = this.db.deleteAlbum(id);
+    return result;
   }
 }

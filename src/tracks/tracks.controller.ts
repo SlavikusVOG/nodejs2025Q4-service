@@ -8,6 +8,7 @@ import {
   HttpException,
   HttpStatus,
   Put,
+  HttpCode,
 } from '@nestjs/common';
 import { TracksService } from './tracks.service';
 import { CreateTrackDto } from './dto/create-track.dto';
@@ -18,6 +19,7 @@ export class TracksController {
   constructor(private readonly tracksService: TracksService) {}
 
   @Post()
+  @HttpCode(201)
   create(@Body() createTrackDto: CreateTrackDto) {
     try {
       const track = this.tracksService.create(createTrackDto);
@@ -70,6 +72,7 @@ export class TracksController {
   }
 
   @Delete(':id')
+  @HttpCode(204)
   remove(@Param('id') id: string) {
     try {
       const result = this.tracksService.remove(id);
