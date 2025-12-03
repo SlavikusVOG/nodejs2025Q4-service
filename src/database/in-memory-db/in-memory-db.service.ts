@@ -14,6 +14,15 @@ export class InMemoryDbService implements Database {
   private tracks = new Map<string, Track>();
   private favorites = new Favorite();
 
+  private static instance: InMemoryDbService;
+
+  constructor() {
+    if (!InMemoryDbService.instance) {
+      InMemoryDbService.instance = this;
+    }
+    return InMemoryDbService.instance
+  }
+
   createUser(data: Pick<User, 'login' | 'password'>): User {
     const user = new User(data);
     this.users.set(user.id, user);
