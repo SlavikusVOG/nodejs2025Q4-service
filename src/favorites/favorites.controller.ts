@@ -7,6 +7,9 @@ import {
   HttpCode,
   HttpStatus,
   HttpException,
+  ClassSerializerInterceptor,
+  UseInterceptors,
+  ParseUUIDPipe,
 } from '@nestjs/common';
 import { FavoritesService } from './favorites.service';
 import { FavoritesResponseDto } from './dto/favorites-response.dto';
@@ -15,14 +18,16 @@ import { FavoritesResponseDto } from './dto/favorites-response.dto';
 export class FavoritesController {
   constructor(private readonly favoritesService: FavoritesService) {}
 
+  @UseInterceptors(ClassSerializerInterceptor)
   @Get()
   findAll(): FavoritesResponseDto {
     return this.favoritesService.getAllFavorites();
   }
 
+  @UseInterceptors(ClassSerializerInterceptor)
   @Post('track/:id')
   @HttpCode(201)
-  addTrack(@Param('id') id: string) {
+  addTrack(@Param('id', ParseUUIDPipe) id: string) {
     try {
       return this.favoritesService.addTrack(id);
     } catch (error) {
@@ -36,9 +41,10 @@ export class FavoritesController {
     }
   }
 
+  @UseInterceptors(ClassSerializerInterceptor)
   @Delete('track/:id')
   @HttpCode(204)
-  removeTrack(@Param('id') id: string) {
+  removeTrack(@Param('id', ParseUUIDPipe) id: string) {
     try {
       return this.favoritesService.removeTrack(id);
     } catch (error) {
@@ -49,9 +55,10 @@ export class FavoritesController {
     }
   }
 
+  @UseInterceptors(ClassSerializerInterceptor)
   @Post('album/:id')
   @HttpCode(201)
-  addAlbum(@Param('id') id: string) {
+  addAlbum(@Param('id', ParseUUIDPipe) id: string) {
     try {
       return this.favoritesService.addAlbum(id);
     } catch (error) {
@@ -65,9 +72,10 @@ export class FavoritesController {
     }
   }
 
+  @UseInterceptors(ClassSerializerInterceptor)
   @Delete('album/:id')
   @HttpCode(204)
-  removeAlbum(@Param('id') id: string) {
+  removeAlbum(@Param('id', ParseUUIDPipe) id: string) {
     try {
       return this.favoritesService.removeAlbum(id);
     } catch (error) {
@@ -78,9 +86,10 @@ export class FavoritesController {
     }
   }
 
+  @UseInterceptors(ClassSerializerInterceptor)
   @Post('artist/:id')
   @HttpCode(201)
-  addArtist(@Param('id') id: string) {
+  addArtist(@Param('id', ParseUUIDPipe) id: string) {
     try {
       return this.favoritesService.addArtist(id);
     } catch (error) {
@@ -94,9 +103,10 @@ export class FavoritesController {
     }
   }
 
+  @UseInterceptors(ClassSerializerInterceptor)
   @Delete('artist/:id')
   @HttpCode(204)
-  removeArtist(@Param('id') id: string) {
+  removeArtist(@Param('id', ParseUUIDPipe) id: string) {
     try {
       return this.favoritesService.removeArtist(id);
     } catch (error) {

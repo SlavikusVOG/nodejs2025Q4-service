@@ -9,6 +9,9 @@ import {
   HttpException,
   HttpStatus,
   Put,
+  ClassSerializerInterceptor,
+  UseInterceptors,
+  ParseUUIDPipe,
 } from '@nestjs/common';
 import { ArtistsService } from './artists.service';
 import { CreateArtistDto } from './dto/create-artist.dto';
@@ -18,6 +21,7 @@ import { UpdateArtistDto } from './dto/update-artist.dto';
 export class ArtistsController {
   constructor(private readonly artistsService: ArtistsService) {}
 
+  @UseInterceptors(ClassSerializerInterceptor)
   @Post()
   @HttpCode(201)
   create(@Body() createArtistDto: CreateArtistDto) {
@@ -32,13 +36,15 @@ export class ArtistsController {
     }
   }
 
+  @UseInterceptors(ClassSerializerInterceptor)
   @Get()
   findAll() {
     return this.artistsService.findAll();
   }
 
+  @UseInterceptors(ClassSerializerInterceptor)
   @Get(':id')
-  findOne(@Param('id') id: string) {
+  findOne(@Param('id', ParseUUIDPipe) id: string) {
     try {
       const artist = this.artistsService.findOne(id);
       if (artist) {
@@ -53,8 +59,12 @@ export class ArtistsController {
     }
   }
 
+  @UseInterceptors(ClassSerializerInterceptor)
   @Put(':id')
-  update(@Param('id') id: string, @Body() updateArtistDto: UpdateArtistDto) {
+  update(
+    @Param('id', ParseUUIDPipe) id: string,
+    @Body() updateArtistDto: UpdateArtistDto,
+  ) {
     try {
       const result = this.artistsService.update(id, updateArtistDto);
       if (result) {
@@ -71,9 +81,10 @@ export class ArtistsController {
     }
   }
 
+  @UseInterceptors(ClassSerializerInterceptor)
   @Delete(':id')
   @HttpCode(204)
-  remove(@Param('id') id: string) {
+  remove(@Param('id', ParseUUIDPipe) id: string) {
     try {
       const result = this.artistsService.remove(id);
       if (result) {

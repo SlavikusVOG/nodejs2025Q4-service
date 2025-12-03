@@ -81,6 +81,7 @@ export class UsersController {
     }
   }
 
+  @UseInterceptors(ClassSerializerInterceptor)
   @Delete(':id')
   @HttpCode(204)
   remove(@Param('id', ParseUUIDPipe) id: string) {

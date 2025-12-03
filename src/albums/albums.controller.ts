@@ -9,6 +9,9 @@ import {
   HttpStatus,
   Put,
   HttpCode,
+  ClassSerializerInterceptor,
+  UseInterceptors,
+  ParseUUIDPipe,
 } from '@nestjs/common';
 import { AlbumsService } from './albums.service';
 import { CreateAlbumDto } from './dto/create-album.dto';
@@ -18,6 +21,7 @@ import { UpdateAlbumDto } from './dto/update-album.dto';
 export class AlbumsController {
   constructor(private readonly albumsService: AlbumsService) {}
 
+  @UseInterceptors(ClassSerializerInterceptor)
   @Post()
   @HttpCode(201)
   create(@Body() createAlbumDto: CreateAlbumDto) {
@@ -32,13 +36,15 @@ export class AlbumsController {
     }
   }
 
+  @UseInterceptors(ClassSerializerInterceptor)
   @Get()
   findAll() {
     return this.albumsService.findAll();
   }
 
+  @UseInterceptors(ClassSerializerInterceptor)
   @Get(':id')
-  findOne(@Param('id') id: string) {
+  findOne(@Param('id', ParseUUIDPipe) id: string) {
     try {
       const album = this.albumsService.findOne(id);
       if (album) {
@@ -53,8 +59,12 @@ export class AlbumsController {
     }
   }
 
+  @UseInterceptors(ClassSerializerInterceptor)
   @Put(':id')
-  update(@Param('id') id: string, @Body() updateAlbumDto: UpdateAlbumDto) {
+  update(
+    @Param('id', ParseUUIDPipe) id: string,
+    @Body() updateAlbumDto: UpdateAlbumDto,
+  ) {
     try {
       const result = this.albumsService.update(id, updateAlbumDto);
       if (result) {
@@ -71,9 +81,10 @@ export class AlbumsController {
     }
   }
 
+  @UseInterceptors(ClassSerializerInterceptor)
   @Delete(':id')
   @HttpCode(204)
-  remove(@Param('id') id: string) {
+  remove(@Param('id', ParseUUIDPipe) id: string) {
     try {
       const result = this.albumsService.remove(id);
       if (result) {

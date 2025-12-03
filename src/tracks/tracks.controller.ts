@@ -9,6 +9,9 @@ import {
   HttpStatus,
   Put,
   HttpCode,
+  ClassSerializerInterceptor,
+  UseInterceptors,
+  ParseUUIDPipe,
 } from '@nestjs/common';
 import { TracksService } from './tracks.service';
 import { CreateTrackDto } from './dto/create-track.dto';
@@ -18,6 +21,7 @@ import { UpdateTrackDto } from './dto/update-track.dto';
 export class TracksController {
   constructor(private readonly tracksService: TracksService) {}
 
+  @UseInterceptors(ClassSerializerInterceptor)
   @Post()
   @HttpCode(201)
   create(@Body() createTrackDto: CreateTrackDto) {
@@ -32,13 +36,15 @@ export class TracksController {
     }
   }
 
+  @UseInterceptors(ClassSerializerInterceptor)
   @Get()
   findAll() {
     return this.tracksService.findAll();
   }
 
+  @UseInterceptors(ClassSerializerInterceptor)
   @Get(':id')
-  findOne(@Param('id') id: string) {
+  findOne(@Param('id', ParseUUIDPipe) id: string) {
     try {
       const track = this.tracksService.findOne(id);
       if (track) {
@@ -53,8 +59,9 @@ export class TracksController {
     }
   }
 
+  @UseInterceptors(ClassSerializerInterceptor)
   @Put(':id')
-  update(@Param('id') id: string, @Body() updateTrackDto: UpdateTrackDto) {
+  update(@Param('id', ParseUUIDPipe) id: string, @Body() updateTrackDto: UpdateTrackDto) {
     try {
       const result = this.tracksService.update(id, updateTrackDto);
       if (result) {
@@ -71,9 +78,10 @@ export class TracksController {
     }
   }
 
+  @UseInterceptors(ClassSerializerInterceptor)
   @Delete(':id')
   @HttpCode(204)
-  remove(@Param('id') id: string) {
+  remove(@Param('id', ParseUUIDPipe) id: string) {
     try {
       const result = this.tracksService.remove(id);
       if (result) {
