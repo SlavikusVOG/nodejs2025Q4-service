@@ -38,7 +38,7 @@ export class InMemoryDbService implements Database {
       user.updatedAt = Date.now();
       return user;
     }
-    return null;
+    throw new Error('404');
   }
 
   updateUserPassword(
@@ -84,7 +84,7 @@ export class InMemoryDbService implements Database {
       Object.assign(artist, data);
       return artist;
     }
-    return null;
+    throw new Error('404');
   }
 
   deleteArtist(id: string) {
@@ -122,7 +122,7 @@ export class InMemoryDbService implements Database {
       Object.assign(track, data);
       return track;
     }
-    return null;
+    throw new Error('404');
   }
 
   deleteTrack(id: string) {
@@ -153,7 +153,7 @@ export class InMemoryDbService implements Database {
       Object.assign(album, data);
       return album;
     }
-    return null;
+    throw new Error('404');
   }
 
   deleteAlbum(id: string) {
