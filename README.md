@@ -8,7 +8,19 @@
 ## Downloading
 
 ```
-git clone {repository URL}
+git clone https://github.com/SlavikusVOG/nodejs2025Q4-service
+```
+
+## Change branch to `dev-part-1`
+
+```
+git checkout dev-part-1
+```
+
+## Create .env file from .env.example
+
+```
+cp .env.example .env.part1
 ```
 
 ## Installing NPM modules
