@@ -28,6 +28,7 @@ export class ArtistsService {
   }
 
   remove(id: string) {
-    this.db.deleteArtist(id);
+    const result = this.db.deleteArtist(id);
+    return result;
   }
 }
