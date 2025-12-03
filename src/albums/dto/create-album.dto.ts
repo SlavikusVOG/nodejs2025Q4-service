@@ -7,6 +7,5 @@ export class CreateAlbumDto {
   @IsNotEmpty()
   year: number;
 
-  @IsNotEmpty()
   artistId: string | null; // refers to Artist
 }
