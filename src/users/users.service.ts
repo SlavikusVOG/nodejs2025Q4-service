@@ -1,6 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { CreateUserDto } from './dto/create-user.dto';
-import { UpdateUserDto } from './dto/update-user.dto';
+import { UpdateUserDto, UpdateUserPasswordDto } from './dto/update-user.dto';
 import { Database } from 'src/database/db/db.interface';
 import { InMemoryDbService } from 'src/database/in-memory-db/in-memory-db.service';
 
@@ -27,7 +27,16 @@ export class UsersService {
     return result;
   }
 
+  updatePassword(id: string, updateUserDto: UpdateUserPasswordDto) {
+    const result = this.db.updateUserPassword(
+      id,
+      updateUserDto.oldPassword,
+      updateUserDto.newPassword,
+    );
+    return result;
+  }
+
   remove(id: string) {
-    this.db.deleteUser(id);
+    return this.db.deleteUser(id);
   }
 }

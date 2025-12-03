@@ -3,15 +3,19 @@ import {
   Get,
   Post,
   Body,
-  Patch,
   Param,
   Delete,
   UseInterceptors,
   ClassSerializerInterceptor,
+  HttpException,
+  HttpStatus,
+  Put,
+  HttpCode,
+  ParseUUIDPipe,
 } from '@nestjs/common';
 import { UsersService } from './users.service';
 import { CreateUserDto } from './dto/create-user.dto';
-import { UpdateUserDto } from './dto/update-user.dto';
+import { UpdateUserPasswordDto } from './dto/update-user.dto';
 
 @Controller('user')
 export class UsersController {
@@ -19,8 +23,17 @@ export class UsersController {
 
   @UseInterceptors(ClassSerializerInterceptor)
   @Post()
+  @HttpCode(201)
   create(@Body() createUserDto: CreateUserDto) {
-    return this.usersService.create(createUserDto);
+    try {
+      const user = this.usersService.create(createUserDto);
+      if (user) {
+        return user;
+      }
+      throw new Error();
+    } catch {
+      throw new HttpException('Bad Request', HttpStatus.BAD_REQUEST);
+    }
   }
 
   @UseInterceptors(ClassSerializerInterceptor)
@@ -31,18 +44,57 @@ export class UsersController {
 
   @UseInterceptors(ClassSerializerInterceptor)
   @Get(':id')
-  findOne(@Param('id') id: string) {
-    return this.usersService.findOne(id);
+  findOne(@Param('id', ParseUUIDPipe) id: string) {
+    try {
+      const user = this.usersService.findOne(id);
+      if (user) {
+        return user;
+      }
+      throw new Error(`${HttpStatus.NOT_FOUND}`);
+    } catch (error) {
+      if (error.message === `${HttpStatus.NOT_FOUND}`) {
+        throw new HttpException('Not Found', HttpStatus.NOT_FOUND);
+      }
+      throw new HttpException('Bad Request', HttpStatus.BAD_REQUEST);
+    }
   }
 
   @UseInterceptors(ClassSerializerInterceptor)
-  @Patch(':id')
-  update(@Param('id') id: string, @Body() updateUserDto: UpdateUserDto) {
-    return this.usersService.update(id, updateUserDto);
+  @Put(':id')
+  update(
+    @Param('id', ParseUUIDPipe) id: string,
+    @Body() updateUserDto: UpdateUserPasswordDto,
+  ) {
+    try {
+      const result = this.usersService.updatePassword(id, updateUserDto);
+      if (result) {
+        return 'Password changed';
+      }
+    } catch (error) {
+      if (error.message === `${HttpStatus.NOT_FOUND}`) {
+        throw new HttpException('Not Found', HttpStatus.NOT_FOUND);
+      }
+      if (error.message === `${HttpStatus.FORBIDDEN}`) {
+        throw new HttpException('Forbidden', HttpStatus.FORBIDDEN);
+      }
+      throw new HttpException('Bad Request', HttpStatus.BAD_REQUEST);
+    }
   }
 
   @Delete(':id')
-  remove(@Param('id') id: string) {
-    return this.usersService.remove(id);
+  @HttpCode(204)
+  remove(@Param('id', ParseUUIDPipe) id: string) {
+    try {
+      const result = this.usersService.remove(id);
+      if (result) {
+        return true;
+      }
+      throw new Error(`${HttpStatus.NOT_FOUND}`);
+    } catch (error) {
+      if (error.message === `${HttpStatus.NOT_FOUND}`) {
+        throw new HttpException('Not Found', HttpStatus.NOT_FOUND);
+      }
+      throw new HttpException('Bad Request', HttpStatus.BAD_REQUEST);
+    }
   }
 }

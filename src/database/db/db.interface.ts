@@ -18,7 +18,7 @@ export interface Database {
     newPassword: string,
   ): boolean;
 
-  deleteUser(id: string);
+  deleteUser(id: string): boolean;
 
   createArtist(data: Omit<Artist, 'id'>): Artist;
 

@@ -14,7 +14,7 @@ export class InMemoryDbService implements Database {
   private tracks = new Map<string, Track>();
   private favorites = new Favorite();
 
-  createUser(data: Pick<User, 'login' | 'password'>) {
+  createUser(data: Pick<User, 'login' | 'password'>): User {
     const user = new User(data);
     this.users.set(user.id, user);
     return user;
@@ -48,14 +48,18 @@ export class InMemoryDbService implements Database {
   ): boolean {
     const user = this.users.get(id);
     if (user) {
-      user.updatePassword(oldPassword, newPassword);
-      return true;
+      if (user.password === oldPassword) {
+        user.updatePassword(oldPassword, newPassword);
+        return true;
+      }
+      throw new Error('403');
     }
-    return false;
+    throw new Error('404');
   }
 
-  deleteUser(id: string) {
-    this.users.delete(id);
+  deleteUser(id: string): boolean {
+    const result = this.users.delete(id);
+    return result;
   }
 
   createArtist(data: Omit<Artist, 'id'>) {
