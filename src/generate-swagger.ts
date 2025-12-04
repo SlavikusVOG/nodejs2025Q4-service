@@ -1,7 +1,7 @@
 import { NestFactory } from '@nestjs/core';
 import { SwaggerModule, DocumentBuilder } from '@nestjs/swagger';
 import { writeFileSync } from 'fs';
-import { AppModule } from './src/app.module';
+import { AppModule } from './app.module';
 import * as yaml from 'js-yaml';
 
 async function generateSwaggerSpec() {
