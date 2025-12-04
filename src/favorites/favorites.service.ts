@@ -1,0 +1,59 @@
+import { Inject, Injectable } from '@nestjs/common';
+import { InMemoryDbService } from 'src/database/in-memory-db/in-memory-db.service';
+
+@Injectable()
+export class FavoritesService {
+  constructor(@Inject('DB') private db: InMemoryDbService) {}
+  getAllFavorites() {
+    const artistIds = this.db.findFavoriteArtists();
+    const albumIds = this.db.findFavoriteAlbums();
+    const trackIds = this.db.findFavoriteTracks();
+    const artists = artistIds.map((id) => this.db.findArtist(id));
+    const albums = albumIds.map((id) => this.db.findAlbum(id));
+    const tracks = trackIds.map((id) => this.db.findTrack(id));
+    return {
+      artists,
+      albums,
+      tracks,
+    };
+  }
+
+  addAlbum(id: string) {
+    const album = this.db.findAlbum(id);
+    if (album) {
+      this.db.addFavoriteAlbum(id);
+      return album;
+    }
+    throw new Error('422');
+  }
+
+  addArtist(id: string) {
+    const artist = this.db.findArtist(id);
+    if (artist) {
+      this.db.addFavoriteArtists(id);
+      return artist;
+    }
+    throw new Error('422');
+  }
+
+  addTrack(id: string) {
+    const track = this.db.findTrack(id);
+    if (track) {
+      this.db.addFavoriteTrack(id);
+      return track;
+    }
+    throw new Error('422');
+  }
+
+  removeAlbum(id: string) {
+    this.db.deleteFavoriteAlbum(id);
+  }
+
+  removeArtist(id: string) {
+    this.db.deleteFavoriteArtist(id);
+  }
+
+  removeTrack(id: string) {
+    this.db.deleteFavoriteTrack(id);
+  }
+}
