@@ -20,7 +20,7 @@ export class InMemoryDbService implements Database {
     if (!InMemoryDbService.instance) {
       InMemoryDbService.instance = this;
     }
-    return InMemoryDbService.instance
+    return InMemoryDbService.instance;
   }
 
   createUser(data: Pick<User, 'login' | 'password'>): User {
@@ -101,15 +101,15 @@ export class InMemoryDbService implements Database {
     this.favorites.artists = this.favorites.artists.filter((aId) => aId !== id);
 
     const albums = this.findAllAlbums();
-    const artistAlbums = albums.filter(a => a.artistId === id);
+    const artistAlbums = albums.filter((a) => a.artistId === id);
     artistAlbums.forEach((a) => {
-        this.updateAlbum(a.id, { artistId: null });
+      this.updateAlbum(a.id, { artistId: null });
     });
 
     const tracks = this.findAllTracks();
     tracks.forEach((t) => {
       this.updateTrack(t.id, { artistId: null });
-    })
+    });
     const result = this.artists.delete(id);
     return result;
   }
@@ -173,7 +173,7 @@ export class InMemoryDbService implements Database {
   deleteAlbum(id: string) {
     this.favorites.albums = this.favorites.albums.filter((aId) => aId !== id);
     const tracks = this.findAllTracks();
-    const albumTracks = tracks.filter(t => t.albumId === id);
+    const albumTracks = tracks.filter((t) => t.albumId === id);
     albumTracks.forEach((t) => {
       this.updateTrack(t.id, { albumId: null });
     });
