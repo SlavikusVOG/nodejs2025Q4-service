@@ -1,5 +1,4 @@
 import { Inject, Injectable } from '@nestjs/common';
-import { Database } from 'src/database/db/db.interface';
 import { InMemoryDbService } from 'src/database/in-memory-db/in-memory-db.service';
 
 @Injectable()
