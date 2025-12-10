@@ -1,4 +1,3 @@
-// src/database/typeorm/typeorm-database.service.ts
 import {
   Injectable,
   NotAcceptableException,
@@ -12,7 +11,6 @@ import { Artist } from '../../artists/entities/artist.entity';
 import { Album } from '../../albums/entities/album.entity';
 import { Track } from '../../tracks/entities/track.entity';
 import { Database } from '../db/db.interface';
-import { NotFoundError } from 'rxjs';
 import { Favorite } from 'src/favorites/entities/favorite.entity';
 
 @Injectable()
@@ -31,7 +29,6 @@ export class TypeOrmDatabaseService implements Database, OnModuleInit {
   ) {}
 
   async onModuleInit() {
-    // Educational: Create tables if they don't exist
     await this.userRepository.query(`
       CREATE TABLE IF NOT EXISTS users (
         id UUID PRIMARY KEY DEFAULT gen_random_uuid(),

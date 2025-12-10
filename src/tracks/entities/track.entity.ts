@@ -1,12 +1,25 @@
-export class Track {
-  id: string; // uuid v4
-  name: string;
-  artistId: string | null; // refers to Artist
-  albumId: string | null; // refers to Album
-  duration: number; // integer number
+import { Album } from 'src/albums/entities/album.entity';
+import { Artist } from 'src/artists/entities/artist.entity';
+import {
+  Column,
+  Entity,
+  JoinColumn,
+  ManyToOne,
+  PrimaryGeneratedColumn,
+} from 'typeorm';
 
-  constructor(partial: Partial<Track>) {
-    Object.assign(this, partial);
-    this.id = crypto.randomUUID();
-  }
+@Entity()
+export class Track {
+  @PrimaryGeneratedColumn()
+  id: string; // uuid v4
+  @Column()
+  name: string;
+  @ManyToOne(() => Artist)
+  @JoinColumn()
+  artist: Artist;
+  @ManyToOne(() => Album)
+  @JoinColumn()
+  album: Album;
+  @Column()
+  duration: number; // integer number
 }

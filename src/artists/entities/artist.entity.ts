@@ -1,10 +1,11 @@
-export class Artist {
-  id: string; // uuid v4
-  name: string;
-  grammy: boolean;
+import { Column, Entity, PrimaryGeneratedColumn } from 'typeorm';
 
-  constructor(partial: Partial<Artist>) {
-    Object.assign(this, partial);
-    this.id = crypto.randomUUID();
-  }
+@Entity()
+export class Artist {
+  @PrimaryGeneratedColumn()
+  id: string; // uuid v4
+  @Column()
+  name: string;
+  @Column()
+  grammy: boolean;
 }

@@ -1,4 +1,3 @@
-// ormconfig.ts or data-source.ts
 import { DataSource } from 'typeorm';
 import { User } from '../users/entities/user.entity';
 import { Artist } from '../artists/entities/artist.entity';

@@ -1,11 +1,14 @@
-export class Album {
-  id: string; // uuid v4
-  name: string;
-  year: number;
-  artistId: string | null; // refers to Artist
+import { Artist } from 'src/artists/entities/artist.entity';
+import { Column, JoinColumn, OneToOne, PrimaryGeneratedColumn } from 'typeorm';
 
-  constructor(partial: Partial<Album>) {
-    Object.assign(this, partial);
-    this.id = crypto.randomUUID();
-  }
+export class Album {
+  @PrimaryGeneratedColumn()
+  id: string; // uuid v4
+  @Column()
+  name: string;
+  @Column()
+  year: number;
+  @OneToOne(() => Artist)
+  @JoinColumn()
+  artist: Artist;
 }
