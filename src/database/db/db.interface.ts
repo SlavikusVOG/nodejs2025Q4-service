@@ -4,65 +4,65 @@ import { Track } from 'src/tracks/entities/track.entity';
 import { User } from 'src/users/entities/user.entity';
 
 export interface Database {
-  createUser(data: Pick<User, 'login' | 'password'>): User;
+  createUser(data: Pick<User, 'login' | 'password'>): User | Promise<User>;
 
-  findUser(id: string): User;
+  findUser(id: string): User | Promise<User>;
 
-  findAllUsers(): User[];
+  findAllUsers(): User[] | Promise<User[]>;
 
-  updateUser(id: string, data: Partial<User>): User | null;
+  updateUser(id: string, data: Partial<User>): User | Promise<User> | null | Promise<null>;
 
   updateUserPassword(
     id: string,
     oldPassword: string,
     newPassword: string,
-  ): boolean;
+  ): boolean | Promise<boolean>;
 
-  deleteUser(id: string): boolean;
+  deleteUser(id: string): boolean | Promise<boolean>;
 
-  createArtist(data: Omit<Artist, 'id'>): Artist;
+  createArtist(data: Omit<Artist, 'id'>): Artist | Promise<Artist>;
 
-  findArtist(id: string): Artist;
+  findArtist(id: string): Artist | Promise<Artist>;
 
-  findAllArtists(): Artist[];
+  findAllArtists(): Artist[] | Promise<Artist[]>;
 
-  updateArtist(id: string, data: Partial<Artist>): Artist;
+  updateArtist(id: string, data: Partial<Artist>): Artist | Promise<Artist>;
 
-  deleteArtist(id: string): boolean;
+  deleteArtist(id: string): boolean | Promise<boolean>;
 
-  createTrack(data: Omit<Track, 'id'>): Track;
+  createTrack(data: Omit<Track, 'id'>): Track | Promise<Track>;
 
-  findTrack(id: string): Track;
+  findTrack(id: string): Track | Promise<Track>;
 
-  findAllTracks(): Track[];
+  findAllTracks(): Track[] | Promise<Track[]>;
 
-  updateTrack(id: string, data: Partial<Track>): Track;
+  updateTrack(id: string, data: Partial<Track>): Track | Promise<Track>;
 
-  deleteTrack(id: string): boolean;
+  deleteTrack(id: string): boolean | Promise<boolean>;
 
-  createAlbum(data: Omit<Album, 'id'>): Album;
+  createAlbum(data: Omit<Album, 'id'>): Album | Promise<Album>;
 
-  findAlbum(id: string): Album;
+  findAlbum(id: string): Album | Promise<Album>;
 
-  findAllAlbums(): Album[];
+  findAllAlbums(): Album[] | Promise<Album[]>;
 
-  updateAlbum(id: string, data: Partial<Album>): Album;
+  updateAlbum(id: string, data: Partial<Album>): Album | Promise<Album>;
 
-  deleteAlbum(id: string): boolean;
+  deleteAlbum(id: string): boolean | Promise<boolean>;
 
-  findFavoriteAlbums(): string[];
+  findFavoriteAlbums(): string[] | Promise<string[]>;
 
   addFavoriteAlbum(id: string);
 
   deleteFavoriteAlbum(id: string);
 
-  findFavoriteArtists(): string[];
+  findFavoriteArtists(): string[] | Promise<string[]>;
 
   addFavoriteArtists(id: string);
 
   deleteFavoriteArtist(id: string);
 
-  findFavoriteTracks(): string[];
+  findFavoriteTracks(): string[] | Promise<string[]>;
 
   addFavoriteTrack(id: string);
 
