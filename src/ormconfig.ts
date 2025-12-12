@@ -1,8 +1,11 @@
 import { DataSource } from 'typeorm';
-import { User } from './src/users/entities/user.entity';
-import { Artist } from './src/artists/entities/artist.entity';
-import { Album } from './src/albums/entities/album.entity';
-import { Track } from './src/tracks/entities/track.entity';
+import { User } from './users/entities/user.entity';
+import { Artist } from './artists/entities/artist.entity';
+import { Album } from './albums/entities/album.entity';
+import { Track } from './tracks/entities/track.entity';
+import { FavoriteAlbums } from 'src/favorites/entities/favorite-albums.entity';
+import { FavoriteArtists } from 'src/favorites/entities/favorite-artists.entity';
+import { FavoriteTracks } from 'src/favorites/entities/favorite-tracks.entity';
 
 export const AppDataSource = new DataSource({
   type: 'postgres',
@@ -20,9 +23,17 @@ export const AppDataSource = new DataSource({
   logger: 'advanced-console',
 
   // Entities
-  entities: [User, Artist, Album, Track],
+  entities: [
+    User,
+    Artist,
+    Album,
+    Track,
+    FavoriteAlbums,
+    FavoriteArtists,
+    FavoriteTracks,
+  ],
 
   // Migrations
-  migrations: ['dist/database/migrations/*.js'],
+  migrations: ['dist/database/migrations/*{.ts,.js}'],
   subscribers: [],
 });

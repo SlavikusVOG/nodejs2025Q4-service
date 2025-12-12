@@ -9,6 +9,11 @@
     "node": ">=22.14.0"
   },
   "scripts": {
+    "typeorm": "typeorm-ts-node-esm",
+    "migration:create": "npm run typeorm -- migration:create src/database/migrations/migrations",
+    "migration:generate": "npm run typeorm -- migration:generate -d src/ormconfig.ts src/database/migrations/migrations",
+    "migration:run": "npm run typeorm -- migration:run -d src/ormconfig.ts",
+    "migration:revert": "npm run typeorm -- migration:revert -d src/ormconfig.ts",
     "prebuild": "rimraf dist",
     "build": "nest build",
     "format": "prettier --write \"src/**/*.ts\" \"test/**/*.ts\"",

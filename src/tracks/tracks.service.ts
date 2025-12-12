@@ -1,11 +1,11 @@
 import { Inject, Injectable } from '@nestjs/common';
 import { CreateTrackDto } from './dto/create-track.dto';
 import { UpdateTrackDto } from './dto/update-track.dto';
-import { InMemoryDbService } from 'src/database/in-memory-db/in-memory-db.service';
+import { TypeOrmDatabaseService } from 'src/database/typeorm/typeorm-database.service';
 
 @Injectable()
 export class TracksService {
-  constructor(@Inject('DB') private db: InMemoryDbService) {}
+  constructor(@Inject('DB') private db: TypeOrmDatabaseService) {}
   create(createTrackDto: CreateTrackDto) {
     const result = this.db.createTrack(createTrackDto);
     return result;

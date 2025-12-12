@@ -10,7 +10,10 @@ export interface Database {
 
   findAllUsers(): User[] | Promise<User[]>;
 
-  updateUser(id: string, data: Partial<User>): User | Promise<User> | null | Promise<null>;
+  updateUser(
+    id: string,
+    data: Partial<User>,
+  ): User | Promise<User> | null | Promise<null>;
 
   updateUserPassword(
     id: string,

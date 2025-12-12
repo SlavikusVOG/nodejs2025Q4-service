@@ -9,6 +9,8 @@ import { AlbumsModule } from './albums/albums.module';
 import { FavoritesModule } from './favorites/favorites.module';
 import { InMemoryDbService } from './database/in-memory-db/in-memory-db.service';
 import { ConfigModule } from '@nestjs/config';
+import { TypeOrmModule } from '@nestjs/typeorm';
+import { AppDataSource } from './ormconfig';
 
 @Module({
   imports: [
@@ -22,6 +24,9 @@ import { ConfigModule } from '@nestjs/config';
     TracksModule,
     AlbumsModule,
     ConfigModule.forRoot(),
+    TypeOrmModule.forRoot({
+      ...AppDataSource.options,
+    }),
   ],
   controllers: [AppController, AppController, AppController],
   providers: [

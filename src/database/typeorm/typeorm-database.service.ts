@@ -11,7 +11,9 @@ import { Artist } from '../../artists/entities/artist.entity';
 import { Album } from '../../albums/entities/album.entity';
 import { Track } from '../../tracks/entities/track.entity';
 import { Database } from '../db/db.interface';
-import { Favorite } from 'src/favorites/entities/favorite.entity';
+import { FavoriteAlbums } from 'src/favorites/entities/favorite-albums.entity';
+import { FavoriteArtists } from 'src/favorites/entities/favorite-artists.entity';
+import { FavoriteTracks } from 'src/favorites/entities/favorite-tracks.entity';
 
 @Injectable()
 export class TypeOrmDatabaseService implements Database, OnModuleInit {
@@ -24,17 +26,21 @@ export class TypeOrmDatabaseService implements Database, OnModuleInit {
     private albumRepository: Repository<Album>,
     @InjectRepository(Track)
     private trackRepository: Repository<Track>,
-    @InjectRepository(Favorite)
-    private favoriteRepository: Repository<Favorite>,
+    @InjectRepository(FavoriteAlbums)
+    private favoriteAlbumsRepository: Repository<FavoriteAlbums>,
+    @InjectRepository(FavoriteArtists)
+    private favoriteArtistsRepository: Repository<FavoriteArtists>,
+    @InjectRepository(FavoriteTracks)
+    private favoriteTracksRepository: Repository<FavoriteTracks>,
   ) {}
 
-  async onModuleInit() {
+  /* async onModuleInit() {
     await this.userRepository.query(`
       CREATE TABLE IF NOT EXISTS users (
         id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
-        login VARCHAR(255) UNIQUE NOT NULL,
-        password VARCHAR(255) NOT NULL,
-        version INTEGER DEFAULT 1,
+        login VARCHAR(256) UNIQUE NOT NULL,
+        password VARCHAR(256) NOT NULL,
+        version INTEGER DEFAULT 2,
         created_at TIMESTAMP DEFAULT NOW(),
         updated_at TIMESTAMP DEFAULT NOW()
       );
@@ -42,7 +48,7 @@ export class TypeOrmDatabaseService implements Database, OnModuleInit {
     await this.albumRepository.query(`
       CREATE TABLE IF NOT EXISTS albums (
         id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
-        name VARCHAR(255) NOT NULL,
+        name VARCHAR(256) NOT NULL,
         grammy BOOLEAN,
       )
     `);
@@ -54,11 +60,19 @@ export class TypeOrmDatabaseService implements Database, OnModuleInit {
       CREATE TABLE IF NOT EXISTS tracks (
       )
     `);
-    await this.favoriteRepository.query(`
+    await this.favoriteAlbumsRepository.query(`
       CREATE TABLE IF NOT EXISTS favorites (
       )
     `);
-  }
+    await this.favoriteArtistsRepository.query(`
+      CREATE TABLE IF NOT EXISTS favorites (
+      )
+    `);
+    await this.favoriteTracksRepository.query(`
+      CREATE TABLE IF NOT EXISTS favorites (
+      )
+    `);
+  } */
 
   // User
   async createUser(data: Pick<User, 'login' | 'password'>): Promise<User> {
@@ -144,20 +158,20 @@ export class TypeOrmDatabaseService implements Database, OnModuleInit {
     return this.albumRepository.save(album);
   }
 
-  async findAlbum(id: string): Album | Promise<Album> {
+  async findAlbum(id: string): Promise<Album> {
     
   }
-  async findAllAlbums(): Album[] | Promise<Album[]> {
+  async findAllAlbums(): Promise<Album[]> {
 
   }
-  async updateAlbum(id: string, data: Partial<Album>): Album | Promise<Album> {
+  async updateAlbum(id: string, data: Partial<Album>): Promise<Album> {
     
   }
-  async deleteAlbum(id: string): boolean | Promise<boolean> {
+  async deleteAlbum(id: string): Promise<boolean> {
     
   }
   // Track
-  async createTrack(data: Omit<Track, 'id'>): Track | Promise<Track> {
+  async createTrack(data: Omit<Track, 'id'>): Promise<Track> {
     const track = this.trackRepository.create(data);
     return this.trackRepository.save(track);
   }
@@ -183,13 +197,13 @@ export class TypeOrmDatabaseService implements Database, OnModuleInit {
   addFavoriteTrack(id: string) {
     
   }
-  findFavoriteAlbums(): string[] | Promise<string[]> {
+  findFavoriteAlbums(): Promise<string[]> {
     
   }
-  findFavoriteArtists(): string[] | Promise<string[]> {
+  findFavoriteArtists(): Promise<string[]> {
     
   }
-  findFavoriteTracks(): string[] | Promise<string[]> {
+  findFavoriteTracks(): Promise<string[]> {
     
   }
   deleteFavoriteAlbum(id: string) {
