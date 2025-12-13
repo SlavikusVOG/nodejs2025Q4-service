@@ -1,5 +1,5 @@
-import { Album } from 'src/albums/entities/album.entity';
-import { Artist } from 'src/artists/entities/artist.entity';
+import { Album } from '../../albums/entities/album.entity';
+import { Artist } from '../../artists/entities/artist.entity';
 import {
   Column,
   Entity,
@@ -14,7 +14,7 @@ export class Track {
   id: string; // uuid v4
   @Column()
   name: string;
-  @ManyToOne(() => Artist)
+  @ManyToOne(() => Artist, (artist) => artist.tracks)
   @JoinColumn()
   artist: Artist;
   @ManyToOne(() => Album)
@@ -22,4 +22,8 @@ export class Track {
   album: Album;
   @Column()
   duration: number; // integer number
+  @Column()
+  artistId: string;
+  @Column()
+  albumId: string;
 }

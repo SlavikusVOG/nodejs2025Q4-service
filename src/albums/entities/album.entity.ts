@@ -1,4 +1,4 @@
-import { Artist } from 'src/artists/entities/artist.entity';
+import { Artist } from '../../artists/entities/artist.entity';
 import { Column, JoinColumn, OneToOne, PrimaryGeneratedColumn } from 'typeorm';
 
 export class Album {
@@ -11,4 +11,6 @@ export class Album {
   @OneToOne(() => Artist)
   @JoinColumn()
   artist: Artist;
+  @Column()
+  artistId: string;
 }

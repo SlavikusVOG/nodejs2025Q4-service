@@ -3,9 +3,9 @@ import { User } from './users/entities/user.entity';
 import { Artist } from './artists/entities/artist.entity';
 import { Album } from './albums/entities/album.entity';
 import { Track } from './tracks/entities/track.entity';
-import { FavoriteAlbums } from 'src/favorites/entities/favorite-albums.entity';
-import { FavoriteArtists } from 'src/favorites/entities/favorite-artists.entity';
-import { FavoriteTracks } from 'src/favorites/entities/favorite-tracks.entity';
+import { FavoriteAlbums } from './favorites/entities/favorite-albums.entity';
+import { FavoriteArtists } from './favorites/entities/favorite-artists.entity';
+import { FavoriteTracks } from './favorites/entities/favorite-tracks.entity';
 
 export const AppDataSource = new DataSource({
   type: 'postgres',
