@@ -1,11 +1,19 @@
 import { Artist } from '../../artists/entities/artist.entity';
-import { Entity, JoinTable, OneToOne, PrimaryGeneratedColumn } from 'typeorm';
+import {
+  Column,
+  Entity,
+  JoinColumn,
+  OneToOne,
+  PrimaryGeneratedColumn,
+} from 'typeorm';
 
 @Entity()
 export class FavoriteArtists {
   @PrimaryGeneratedColumn()
   id: string;
   @OneToOne(() => Artist)
-  @JoinTable()
+  @JoinColumn({ name: 'artistId' })
   artist: Artist;
+  @Column()
+  artistId: string;
 }

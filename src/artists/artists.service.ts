@@ -1,7 +1,7 @@
 import { Inject, Injectable } from '@nestjs/common';
 import { CreateArtistDto } from './dto/create-artist.dto';
 import { UpdateArtistDto } from './dto/update-artist.dto';
-import { InMemoryDbService } from 'src/database/in-memory-db/in-memory-db.service';
+import { InMemoryDbService } from '../database/in-memory-db/in-memory-db.service';
 
 @Injectable()
 export class ArtistsService {

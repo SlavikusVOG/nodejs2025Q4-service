@@ -1,11 +1,19 @@
 import { Album } from '../../albums/entities/album.entity';
-import { Entity, JoinColumn, OneToOne, PrimaryGeneratedColumn } from 'typeorm';
+import {
+  Column,
+  Entity,
+  JoinColumn,
+  OneToOne,
+  PrimaryGeneratedColumn,
+} from 'typeorm';
 
 @Entity()
 export class FavoriteAlbums {
   @PrimaryGeneratedColumn()
   id: string;
   @OneToOne(() => Album)
-  @JoinColumn()
+  @JoinColumn({ name: 'albumId' })
   album: Album;
+  @Column()
+  albumId: string;
 }

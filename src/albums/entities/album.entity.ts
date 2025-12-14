@@ -1,5 +1,13 @@
+import { Track } from '../../tracks/entities/track.entity';
 import { Artist } from '../../artists/entities/artist.entity';
-import { Column, JoinColumn, OneToOne, PrimaryGeneratedColumn } from 'typeorm';
+import {
+  Column,
+  JoinColumn,
+  OneToMany,
+  OneToOne,
+  PrimaryGeneratedColumn,
+} from 'typeorm';
+import { FavoriteAlbums } from '../../favorites/entities/favorite-albums.entity';
 
 export class Album {
   @PrimaryGeneratedColumn()
@@ -9,8 +17,12 @@ export class Album {
   @Column()
   year: number;
   @OneToOne(() => Artist)
-  @JoinColumn()
+  @JoinColumn({ name: 'artistId' })
   artist: Artist;
   @Column()
   artistId: string;
+  @OneToMany(() => Track, (t) => t.albumId)
+  tracks: Track[];
+  @OneToOne(() => FavoriteAlbums, (f) => f.album)
+  favorites: FavoriteAlbums;
 }

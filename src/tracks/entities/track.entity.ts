@@ -1,3 +1,4 @@
+import { FavoriteTracks } from '../../favorites/entities/favorite-tracks.entity';
 import { Album } from '../../albums/entities/album.entity';
 import { Artist } from '../../artists/entities/artist.entity';
 import {
@@ -5,6 +6,7 @@ import {
   Entity,
   JoinColumn,
   ManyToOne,
+  OneToOne,
   PrimaryGeneratedColumn,
 } from 'typeorm';
 
@@ -15,10 +17,10 @@ export class Track {
   @Column()
   name: string;
   @ManyToOne(() => Artist, (artist) => artist.tracks)
-  @JoinColumn()
+  @JoinColumn({ name: 'artistId' })
   artist: Artist;
   @ManyToOne(() => Album)
-  @JoinColumn()
+  @JoinColumn({ name: 'albumId' })
   album: Album;
   @Column()
   duration: number; // integer number
@@ -26,4 +28,6 @@ export class Track {
   artistId: string;
   @Column()
   albumId: string;
+  @OneToOne(() => FavoriteTracks, (f) => f.track)
+  favorites: FavoriteTracks;
 }

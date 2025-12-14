@@ -1,7 +1,7 @@
 import { Module } from '@nestjs/common';
 import { TracksService } from './tracks.service';
 import { TracksController } from './tracks.controller';
-import { InMemoryDbService } from 'src/database/in-memory-db/in-memory-db.service';
+import { InMemoryDbService } from '../database/in-memory-db/in-memory-db.service';
 
 @Module({
   controllers: [TracksController],

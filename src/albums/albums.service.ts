@@ -1,7 +1,7 @@
 import { Inject, Injectable } from '@nestjs/common';
 import { CreateAlbumDto } from './dto/create-album.dto';
 import { UpdateAlbumDto } from './dto/update-album.dto';
-import { Database } from 'src/database/db/db.interface';
+import { Database } from '../database/db/db.interface';
 
 @Injectable()
 export class AlbumsService {

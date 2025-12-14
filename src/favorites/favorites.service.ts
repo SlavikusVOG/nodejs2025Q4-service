@@ -1,5 +1,5 @@
 import { Inject, Injectable } from '@nestjs/common';
-import { InMemoryDbService } from 'src/database/in-memory-db/in-memory-db.service';
+import { InMemoryDbService } from '../database/in-memory-db/in-memory-db.service';
 
 @Injectable()
 export class FavoritesService {

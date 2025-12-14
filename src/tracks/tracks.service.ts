@@ -1,7 +1,7 @@
 import { Inject, Injectable } from '@nestjs/common';
 import { CreateTrackDto } from './dto/create-track.dto';
 import { UpdateTrackDto } from './dto/update-track.dto';
-import { TypeOrmDatabaseService } from 'src/database/typeorm/typeorm-database.service';
+import { TypeOrmDatabaseService } from '../database/typeorm/typeorm-database.service';
 
 @Injectable()
 export class TracksService {

@@ -1,11 +1,19 @@
 import { Track } from '../../tracks/entities/track.entity';
-import { Entity, JoinColumn, OneToOne, PrimaryGeneratedColumn } from 'typeorm';
+import {
+  Column,
+  Entity,
+  JoinColumn,
+  OneToOne,
+  PrimaryGeneratedColumn,
+} from 'typeorm';
 
 @Entity()
 export class FavoriteTracks {
   @PrimaryGeneratedColumn()
   id: string;
   @OneToOne(() => Track)
-  @JoinColumn()
+  @JoinColumn({ name: 'trackId' })
   track: Track;
+  @Column()
+  trackId: string;
 }
