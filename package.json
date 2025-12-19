@@ -9,6 +9,8 @@
     "node": ">=22.14.0"
   },
   "scripts": {
+    "docker:installdb": "docker compose up -d",
+    "docker:startdb": "docker run -d --env-file ./.env -p 127.0.0.1:5432:5432 postgresdb",
     "typeorm": "typeorm-ts-node-commonjs",
     "migration:create": "npm run typeorm -- migration:create src/database/migrations/migrations",
     "migration:generate": "npm run typeorm -- migration:generate -d src/ormconfig.ts src/database/migrations/migrations",
