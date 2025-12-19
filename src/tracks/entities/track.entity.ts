@@ -19,7 +19,7 @@ export class Track {
   @ManyToOne(() => Artist, (artist) => artist.tracks)
   @JoinColumn({ name: 'artistId' })
   artist: Artist;
-  @ManyToOne(() => Album)
+  @ManyToOne(() => Album, (album) => album.tracks)
   @JoinColumn({ name: 'albumId' })
   album: Album;
   @Column()

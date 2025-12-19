@@ -2,6 +2,7 @@ import { Track } from '../../tracks/entities/track.entity';
 import { Artist } from '../../artists/entities/artist.entity';
 import {
   Column,
+  Entity,
   JoinColumn,
   OneToMany,
   OneToOne,
@@ -9,6 +10,7 @@ import {
 } from 'typeorm';
 import { FavoriteAlbums } from '../../favorites/entities/favorite-albums.entity';
 
+@Entity()
 export class Album {
   @PrimaryGeneratedColumn()
   id: string; // uuid v4
@@ -21,7 +23,8 @@ export class Album {
   artist: Artist;
   @Column()
   artistId: string;
-  @OneToMany(() => Track, (t) => t.albumId)
+  @OneToMany(() => Track, (t) => t.album)
+  @JoinColumn({ name: 'albumId' })
   tracks: Track[];
   @OneToOne(() => FavoriteAlbums, (f) => f.album)
   favorites: FavoriteAlbums;
