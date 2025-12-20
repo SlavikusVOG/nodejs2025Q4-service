@@ -1,33 +1,33 @@
 import { Inject, Injectable } from '@nestjs/common';
 import { CreateArtistDto } from './dto/create-artist.dto';
 import { UpdateArtistDto } from './dto/update-artist.dto';
-import { InMemoryDbService } from '../database/in-memory-db/in-memory-db.service';
+import { TypeOrmDatabaseService } from '../database/typeorm/typeorm-database.service';
 
 @Injectable()
 export class ArtistsService {
-  constructor(@Inject('DB') private db: InMemoryDbService) {}
-  create(createArtistDto: CreateArtistDto) {
-    const result = this.db.createArtist(createArtistDto);
+  constructor(@Inject('TypeORM') private db: TypeOrmDatabaseService) {}
+  async create(createArtistDto: CreateArtistDto) {
+    const result = await this.db.createArtist(createArtistDto);
     return result;
   }
 
-  findAll() {
-    const result = this.db.findAllArtists();
+  async findAll() {
+    const result = await this.db.findAllArtists();
     return result;
   }
 
-  findOne(id: string) {
-    const result = this.db.findArtist(id);
+  async findOne(id: string) {
+    const result = await this.db.findArtist(id);
     return result;
   }
 
-  update(id: string, updateArtistDto: UpdateArtistDto) {
-    const result = this.db.updateArtist(id, updateArtistDto);
+  async update(id: string, updateArtistDto: UpdateArtistDto) {
+    const result = await this.db.updateArtist(id, updateArtistDto);
     return result;
   }
 
-  remove(id: string) {
-    const result = this.db.deleteArtist(id);
+  async remove(id: string) {
+    const result = await this.db.deleteArtist(id);
     return result;
   }
 }

@@ -1,59 +1,68 @@
 import { Inject, Injectable } from '@nestjs/common';
-import { InMemoryDbService } from '../database/in-memory-db/in-memory-db.service';
+import { TypeOrmDatabaseService } from '../database/typeorm/typeorm-database.service';
+import { Artist } from '../artists/entities/artist.entity';
+import { Album } from '../albums/entities/album.entity';
+import { Track } from '../tracks/entities/track.entity';
 
 @Injectable()
 export class FavoritesService {
-  constructor(@Inject('DB') private db: InMemoryDbService) {}
-  getAllFavorites() {
-    const artistIds = this.db.findFavoriteArtists();
-    const albumIds = this.db.findFavoriteAlbums();
-    const trackIds = this.db.findFavoriteTracks();
-    const artists = artistIds.map((id) => this.db.findArtist(id));
-    const albums = albumIds.map((id) => this.db.findAlbum(id));
-    const tracks = trackIds.map((id) => this.db.findTrack(id));
+  constructor(@Inject('TypeORM') private db: TypeOrmDatabaseService) {}
+  async getAllFavorites() {
+    const artistIds = await this.db.findFavoriteArtists();
+    const albumIds = await this.db.findFavoriteAlbums();
+    const trackIds = await this.db.findFavoriteTracks();
+    const artists = await Promise.all(
+      artistIds.map((id) => this.db.findArtist(id).catch(() => null)),
+    );
+    const albums = await Promise.all(
+      albumIds.map((id) => this.db.findAlbum(id).catch(() => null)),
+    );
+    const tracks = await Promise.all(
+      trackIds.map((id) => this.db.findTrack(id).catch(() => null)),
+    );
     return {
-      artists,
-      albums,
-      tracks,
+      artists: artists.filter((a) => a !== null) as Artist[],
+      albums: albums.filter((a) => a !== null) as Album[],
+      tracks: tracks.filter((t) => t !== null) as Track[],
     };
   }
 
-  addAlbum(id: string) {
-    const album = this.db.findAlbum(id);
+  async addAlbum(id: string) {
+    const album = await this.db.findAlbum(id);
     if (album) {
-      this.db.addFavoriteAlbum(id);
+      await this.db.addFavoriteAlbum(id);
       return album;
     }
     throw new Error('422');
   }
 
-  addArtist(id: string) {
-    const artist = this.db.findArtist(id);
+  async addArtist(id: string) {
+    const artist = await this.db.findArtist(id);
     if (artist) {
-      this.db.addFavoriteArtists(id);
+      await this.db.addFavoriteArtists(id);
       return artist;
     }
     throw new Error('422');
   }
 
-  addTrack(id: string) {
-    const track = this.db.findTrack(id);
+  async addTrack(id: string) {
+    const track = await this.db.findTrack(id);
     if (track) {
-      this.db.addFavoriteTrack(id);
+      await this.db.addFavoriteTrack(id);
       return track;
     }
     throw new Error('422');
   }
 
-  removeAlbum(id: string) {
-    this.db.deleteFavoriteAlbum(id);
+  async removeAlbum(id: string) {
+    await this.db.deleteFavoriteAlbum(id);
   }
 
-  removeArtist(id: string) {
-    this.db.deleteFavoriteArtist(id);
+  async removeArtist(id: string) {
+    await this.db.deleteFavoriteArtist(id);
   }
 
-  removeTrack(id: string) {
-    this.db.deleteFavoriteTrack(id);
+  async removeTrack(id: string) {
+    await this.db.deleteFavoriteTrack(id);
   }
 }

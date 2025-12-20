@@ -23,7 +23,9 @@ export interface Database {
 
   deleteUser(id: string): boolean | Promise<boolean>;
 
-  createArtist(data: Omit<Artist, 'id'>): Artist | Promise<Artist>;
+  createArtist(
+    data: Omit<Artist, 'id' | 'favorites' | 'tracks' | 'albums'>,
+  ): Artist | Promise<Artist>;
 
   findArtist(id: string): Artist | Promise<Artist>;
 
@@ -33,7 +35,9 @@ export interface Database {
 
   deleteArtist(id: string): boolean | Promise<boolean>;
 
-  createTrack(data: Omit<Track, 'id'>): Track | Promise<Track>;
+  createTrack(
+    data: Omit<Track, 'id' | 'artist' | 'album' | 'favorites'>,
+  ): Track | Promise<Track>;
 
   findTrack(id: string): Track | Promise<Track>;
 
@@ -43,7 +47,9 @@ export interface Database {
 
   deleteTrack(id: string): boolean | Promise<boolean>;
 
-  createAlbum(data: Omit<Album, 'id'>): Album | Promise<Album>;
+  createAlbum(
+    data: Omit<Album, 'id' | 'artist' | 'favorites' | 'tracks'>,
+  ): Album | Promise<Album>;
 
   findAlbum(id: string): Album | Promise<Album>;
 

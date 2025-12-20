@@ -5,29 +5,29 @@ import { TypeOrmDatabaseService } from '../database/typeorm/typeorm-database.ser
 
 @Injectable()
 export class TracksService {
-  constructor(@Inject('DB') private db: TypeOrmDatabaseService) {}
-  create(createTrackDto: CreateTrackDto) {
-    const result = this.db.createTrack(createTrackDto);
+  constructor(@Inject('TypeORM') private db: TypeOrmDatabaseService) {}
+  async create(createTrackDto: CreateTrackDto) {
+    const result = await this.db.createTrack(createTrackDto);
     return result;
   }
 
-  findAll() {
-    const result = this.db.findAllTracks();
+  async findAll() {
+    const result = await this.db.findAllTracks();
     return result;
   }
 
-  findOne(id: string) {
-    const result = this.db.findTrack(id);
+  async findOne(id: string) {
+    const result = await this.db.findTrack(id);
     return result;
   }
 
-  update(id: string, updateTrackDto: UpdateTrackDto) {
-    const result = this.db.updateTrack(id, updateTrackDto);
+  async update(id: string, updateTrackDto: UpdateTrackDto) {
+    const result = await this.db.updateTrack(id, updateTrackDto);
     return result;
   }
 
-  remove(id: string) {
-    const result = this.db.deleteTrack(id);
+  async remove(id: string) {
+    const result = await this.db.deleteTrack(id);
     return result;
   }
 }

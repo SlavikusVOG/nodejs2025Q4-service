@@ -7,10 +7,10 @@ import { ArtistsModule } from './artists/artists.module';
 import { TracksModule } from './tracks/tracks.module';
 import { AlbumsModule } from './albums/albums.module';
 import { FavoritesModule } from './favorites/favorites.module';
-import { InMemoryDbService } from './database/in-memory-db/in-memory-db.service';
 import { ConfigModule } from '@nestjs/config';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { AppDataSource } from './ormconfig';
+import { TypeOrmDatabaseService } from './database/typeorm/typeorm-database.service';
 
 @Module({
   imports: [
@@ -31,10 +31,9 @@ import { AppDataSource } from './ormconfig';
   controllers: [AppController, AppController, AppController],
   providers: [
     AppService,
-    InMemoryDbService,
     {
-      provide: 'DB',
-      useClass: InMemoryDbService,
+      provide: 'TypeORM',
+      useClass: TypeOrmDatabaseService,
     },
   ],
 })

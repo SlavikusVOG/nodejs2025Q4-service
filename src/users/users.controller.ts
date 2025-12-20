@@ -24,9 +24,9 @@ export class UsersController {
   @UseInterceptors(ClassSerializerInterceptor)
   @Post()
   @HttpCode(201)
-  create(@Body() createUserDto: CreateUserDto) {
+  async create(@Body() createUserDto: CreateUserDto) {
     try {
-      const user = this.usersService.create(createUserDto);
+      const user = await this.usersService.create(createUserDto);
       if (user) {
         return user;
       }
@@ -38,15 +38,15 @@ export class UsersController {
 
   @UseInterceptors(ClassSerializerInterceptor)
   @Get()
-  findAll() {
-    return this.usersService.findAll();
+  async findAll() {
+    return await this.usersService.findAll();
   }
 
   @UseInterceptors(ClassSerializerInterceptor)
   @Get(':id')
-  findOne(@Param('id', ParseUUIDPipe) id: string) {
+  async findOne(@Param('id', ParseUUIDPipe) id: string) {
     try {
-      const user = this.usersService.findOne(id);
+      const user = await this.usersService.findOne(id);
       if (user) {
         return user;
       }
@@ -61,12 +61,12 @@ export class UsersController {
 
   @UseInterceptors(ClassSerializerInterceptor)
   @Put(':id')
-  update(
+  async update(
     @Param('id', ParseUUIDPipe) id: string,
     @Body() updateUserDto: UpdateUserPasswordDto,
   ) {
     try {
-      const result = this.usersService.updatePassword(id, updateUserDto);
+      const result = await this.usersService.updatePassword(id, updateUserDto);
       if (result) {
         return 'Password changed';
       }
@@ -84,9 +84,9 @@ export class UsersController {
   @UseInterceptors(ClassSerializerInterceptor)
   @Delete(':id')
   @HttpCode(204)
-  remove(@Param('id', ParseUUIDPipe) id: string) {
+  async remove(@Param('id', ParseUUIDPipe) id: string) {
     try {
-      const result = this.usersService.remove(id);
+      const result = await this.usersService.remove(id);
       if (result) {
         return true;
       }

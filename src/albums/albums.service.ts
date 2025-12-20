@@ -1,33 +1,34 @@
 import { Inject, Injectable } from '@nestjs/common';
 import { CreateAlbumDto } from './dto/create-album.dto';
 import { UpdateAlbumDto } from './dto/update-album.dto';
-import { Database } from '../database/db/db.interface';
+// import { Database } from '../database/db/db.interface';
+import { TypeOrmDatabaseService } from '../database/typeorm/typeorm-database.service';
 
 @Injectable()
 export class AlbumsService {
-  constructor(@Inject('DB') private db: Database) {}
-  create(createAlbumDto: CreateAlbumDto) {
-    const result = this.db.createAlbum(createAlbumDto);
+  constructor(@Inject('TypeORM') private db: TypeOrmDatabaseService) {}
+  async create(createAlbumDto: CreateAlbumDto) {
+    const result = await this.db.createAlbum(createAlbumDto);
     return result;
   }
 
-  findAll() {
-    const result = this.db.findAllAlbums();
+  async findAll() {
+    const result = await this.db.findAllAlbums();
     return result;
   }
 
-  findOne(id: string) {
-    const result = this.db.findAlbum(id);
+  async findOne(id: string) {
+    const result = await this.db.findAlbum(id);
     return result;
   }
 
-  update(id: string, updateAlbumDto: UpdateAlbumDto) {
-    const result = this.db.updateAlbum(id, updateAlbumDto);
+  async update(id: string, updateAlbumDto: UpdateAlbumDto) {
+    const result = await this.db.updateAlbum(id, updateAlbumDto);
     return result;
   }
 
-  remove(id: string) {
-    const result = this.db.deleteAlbum(id);
+  async remove(id: string) {
+    const result = await this.db.deleteAlbum(id);
     return result;
   }
 }

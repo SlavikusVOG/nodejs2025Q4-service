@@ -1,15 +1,15 @@
 import { Module } from '@nestjs/common';
 import { ArtistsService } from './artists.service';
 import { ArtistsController } from './artists.controller';
-import { InMemoryDbService } from '../database/in-memory-db/in-memory-db.service';
+import { TypeOrmDatabaseService } from 'src/database/typeorm/typeorm-database.service';
 
 @Module({
   controllers: [ArtistsController],
   providers: [
     ArtistsService,
     {
-      provide: 'DB',
-      useClass: InMemoryDbService,
+      provide: 'TypeORM',
+      useClass: TypeOrmDatabaseService,
     },
   ],
 })

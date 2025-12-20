@@ -4,6 +4,7 @@ import { Track } from '../../tracks/entities/track.entity';
 import {
   Column,
   Entity,
+  JoinColumn,
   OneToMany,
   OneToOne,
   PrimaryGeneratedColumn,
@@ -17,9 +18,11 @@ export class Artist {
   name: string;
   @Column()
   grammy: boolean;
-  @OneToMany(() => Track, (track) => track.artistId)
+  @OneToMany(() => Track, (track) => track.artist)
+  @JoinColumn({ name: 'artistId' })
   tracks: Track[];
-  @OneToMany(() => Album, (album) => album.artistId)
+  @OneToMany(() => Album, (album) => album.artist)
+  @JoinColumn({ name: 'artistId' })
   albums: Album[];
   @OneToOne(() => FavoriteArtists, (f) => f.artist)
   favorites: FavoriteArtists;

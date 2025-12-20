@@ -24,9 +24,9 @@ export class TracksController {
   @UseInterceptors(ClassSerializerInterceptor)
   @Post()
   @HttpCode(201)
-  create(@Body() createTrackDto: CreateTrackDto) {
+  async create(@Body() createTrackDto: CreateTrackDto) {
     try {
-      const track = this.tracksService.create(createTrackDto);
+      const track = await this.tracksService.create(createTrackDto);
       if (track) {
         return track;
       }
@@ -38,15 +38,15 @@ export class TracksController {
 
   @UseInterceptors(ClassSerializerInterceptor)
   @Get()
-  findAll() {
-    return this.tracksService.findAll();
+  async findAll() {
+    return await this.tracksService.findAll();
   }
 
   @UseInterceptors(ClassSerializerInterceptor)
   @Get(':id')
-  findOne(@Param('id', ParseUUIDPipe) id: string) {
+  async findOne(@Param('id', ParseUUIDPipe) id: string) {
     try {
-      const track = this.tracksService.findOne(id);
+      const track = await this.tracksService.findOne(id);
       if (track) {
         return track;
       }
@@ -61,12 +61,12 @@ export class TracksController {
 
   @UseInterceptors(ClassSerializerInterceptor)
   @Put(':id')
-  update(
+  async update(
     @Param('id', ParseUUIDPipe) id: string,
     @Body() updateTrackDto: UpdateTrackDto,
   ) {
     try {
-      const result = this.tracksService.update(id, updateTrackDto);
+      const result = await this.tracksService.update(id, updateTrackDto);
       if (result) {
         return result;
       }
@@ -84,9 +84,9 @@ export class TracksController {
   @UseInterceptors(ClassSerializerInterceptor)
   @Delete(':id')
   @HttpCode(204)
-  remove(@Param('id', ParseUUIDPipe) id: string) {
+  async remove(@Param('id', ParseUUIDPipe) id: string) {
     try {
-      const result = this.tracksService.remove(id);
+      const result = await this.tracksService.remove(id);
       if (result) {
         return true;
       }

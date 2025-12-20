@@ -17,6 +17,8 @@ import { FavoriteTracks } from '../../favorites/entities/favorite-tracks.entity'
 
 @Injectable()
 export class TypeOrmDatabaseService implements Database, OnModuleInit {
+  private static instance: TypeOrmDatabaseService;
+
   constructor(
     @InjectRepository(User)
     private userRepository: Repository<User>,
@@ -32,55 +34,24 @@ export class TypeOrmDatabaseService implements Database, OnModuleInit {
     private favoriteArtistsRepository: Repository<FavoriteArtists>,
     @InjectRepository(FavoriteTracks)
     private favoriteTracksRepository: Repository<FavoriteTracks>,
-  ) {}
+  ) {
+    if (!TypeOrmDatabaseService.instance) {
+      TypeOrmDatabaseService.instance = this;
+    }
+    return TypeOrmDatabaseService.instance;
+  }
 
-  /* async onModuleInit() {
-    await this.userRepository.query(`
-      CREATE TABLE IF NOT EXISTS users (
-        id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
-        login VARCHAR(256) UNIQUE NOT NULL,
-        password VARCHAR(256) NOT NULL,
-        version INTEGER DEFAULT 2,
-        created_at TIMESTAMP DEFAULT NOW(),
-        updated_at TIMESTAMP DEFAULT NOW()
-      );
-    `);
-    await this.albumRepository.query(`
-      CREATE TABLE IF NOT EXISTS albums (
-        id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
-        name VARCHAR(256) NOT NULL,
-        grammy BOOLEAN,
-      )
-    `);
-    await this.artistRepository.query(`
-      CREATE TABLE IF NOT EXISTS artists (
-      )
-    `);
-    await this.trackRepository.query(`
-      CREATE TABLE IF NOT EXISTS tracks (
-      )
-    `);
-    await this.favoriteAlbumsRepository.query(`
-      CREATE TABLE IF NOT EXISTS favorites (
-      )
-    `);
-    await this.favoriteArtistsRepository.query(`
-      CREATE TABLE IF NOT EXISTS favorites (
-      )
-    `);
-    await this.favoriteTracksRepository.query(`
-      CREATE TABLE IF NOT EXISTS favorites (
-      )
-    `);
-  } */
+  async onModuleInit(): Promise<void> {}
 
   // User
   async createUser(data: Pick<User, 'login' | 'password'>): Promise<User> {
-    const user = this.userRepository.create({
+    const user = await this.userRepository.create({
       ...data,
       version: 1,
     });
-    return this.userRepository.save(user);
+    const result = await this.userRepository.save(user);
+    debugger;
+    return result;
   }
 
   async findUser(id: string): Promise<User | null> {
@@ -96,7 +67,7 @@ export class TypeOrmDatabaseService implements Database, OnModuleInit {
     if (!user) return null;
 
     Object.assign(user, data);
-    return this.userRepository.save(user);
+    return await this.userRepository.save(user);
   }
 
   async updateUserPassword(
@@ -107,7 +78,7 @@ export class TypeOrmDatabaseService implements Database, OnModuleInit {
     const user = await this.findUser(id);
     if (user) {
       if (user.password === oldPassword) {
-        user.updatePassword(oldPassword, newPassword);
+        user.password = newPassword;
         user.version += 1;
         const result = await this.userRepository.save(user);
         return !!result;
@@ -123,9 +94,11 @@ export class TypeOrmDatabaseService implements Database, OnModuleInit {
   }
 
   // Artist
-  async createArtist(data: { name: string; grammy: boolean }): Promise<Artist> {
+  async createArtist(
+    data: Omit<Artist, 'id' | 'favorites' | 'tracks' | 'albums'>,
+  ): Promise<Artist> {
     const artist = this.artistRepository.create(data);
-    return this.artistRepository.save(artist);
+    return await this.artistRepository.save(artist);
   }
 
   async findArtist(id: string): Promise<Artist | null> {
@@ -143,7 +116,7 @@ export class TypeOrmDatabaseService implements Database, OnModuleInit {
     const artist = await this.findArtist(id);
     if (!artist) return null;
     Object.assign(artist, data);
-    return this.artistRepository.save(artist);
+    return await this.artistRepository.save(artist);
   }
 
   async deleteArtist(id: string): Promise<boolean> {
@@ -153,66 +126,133 @@ export class TypeOrmDatabaseService implements Database, OnModuleInit {
   }
 
   // Album
-  async createAlbum(data: Omit<Album, 'id'>): Promise<Album> {
+  async createAlbum(
+    data: Omit<Album, 'id' | 'artist' | 'favorites' | 'tracks'>,
+  ): Promise<Album> {
     const album = this.albumRepository.create(data);
-    return this.albumRepository.save(album);
+    return await this.albumRepository.save(album);
   }
 
   async findAlbum(id: string): Promise<Album> {
-    
+    const album = await this.albumRepository.findOne({ where: { id } });
+    if (!album) {
+      throw new NotFoundException();
+    }
+    return album;
   }
-  async findAllAlbums(): Promise<Album[]> {
 
+  async findAllAlbums(): Promise<Album[]> {
+    return await this.albumRepository.find();
   }
+
   async updateAlbum(id: string, data: Partial<Album>): Promise<Album> {
-    
+    const album = await this.findAlbum(id);
+    Object.assign(album, data);
+    return await this.albumRepository.save(album);
   }
+
   async deleteAlbum(id: string): Promise<boolean> {
-    
+    await this.trackRepository.update({ albumId: id }, { albumId: null });
+    const result = await this.albumRepository.delete(id);
+    return result.affected !== 0;
   }
   // Track
-  async createTrack(data: Omit<Track, 'id'>): Promise<Track> {
+  async createTrack(
+    data: Omit<Track, 'id' | 'artist' | 'album' | 'favorites'>,
+  ): Promise<Track> {
     const track = this.trackRepository.create(data);
-    return this.trackRepository.save(track);
+    return await this.trackRepository.save(track);
   }
-  async findTrack(id: string): Track | Promise<Track> {
-    
+
+  async findTrack(id: string): Promise<Track> {
+    const track = await this.trackRepository.findOne({ where: { id } });
+    if (!track) {
+      throw new NotFoundException();
+    }
+    return track;
   }
-  async findAllTracks(): Track[] | Promise<Track[]> {
-    
+
+  async findAllTracks(): Promise<Track[]> {
+    return this.trackRepository.find();
   }
-  async updateTrack(id: string, data: Partial<Track>): Track | Promise<Track> {
-    
+
+  async updateTrack(id: string, data: Partial<Track>): Promise<Track> {
+    const track = await this.findTrack(id);
+    Object.assign(track, data);
+    return await this.trackRepository.save(track);
   }
-  async deleteTrack(id: string): boolean | Promise<boolean> {
-    
+
+  async deleteTrack(id: string): Promise<boolean> {
+    const result = await this.trackRepository.delete(id);
+    return result.affected !== 0;
   }
   // Favorites
-  addFavoriteAlbum(id: string) {
-    
+  async addFavoriteAlbum(id: string): Promise<void> {
+    const album = await this.albumRepository.findOne({ where: { id } });
+    if (!album) {
+      throw new NotAcceptableException();
+    }
+    const existing = await this.favoriteAlbumsRepository.findOne({
+      where: { albumId: id },
+    });
+    if (!existing) {
+      const favorite = this.favoriteAlbumsRepository.create({ albumId: id });
+      await this.favoriteAlbumsRepository.save(favorite);
+    }
   }
-  addFavoriteArtists(id: string) {
-    
+
+  async addFavoriteArtists(id: string): Promise<void> {
+    const artist = await this.artistRepository.findOne({ where: { id } });
+    if (!artist) {
+      throw new NotAcceptableException();
+    }
+    const existing = await this.favoriteArtistsRepository.findOne({
+      where: { artistId: id },
+    });
+    if (!existing) {
+      const favorite = this.favoriteArtistsRepository.create({ artistId: id });
+      await this.favoriteArtistsRepository.save(favorite);
+    }
   }
-  addFavoriteTrack(id: string) {
-    
+
+  async addFavoriteTrack(id: string): Promise<void> {
+    const track = await this.trackRepository.findOne({ where: { id } });
+    if (!track) {
+      throw new NotAcceptableException();
+    }
+    const existing = await this.favoriteTracksRepository.findOne({
+      where: { trackId: id },
+    });
+    if (!existing) {
+      const favorite = this.favoriteTracksRepository.create({ trackId: id });
+      await this.favoriteTracksRepository.save(favorite);
+    }
   }
-  findFavoriteAlbums(): Promise<string[]> {
-    
+
+  async findFavoriteAlbums(): Promise<string[]> {
+    const favorites = await this.favoriteAlbumsRepository.find();
+    return favorites.map((f) => f.albumId);
   }
-  findFavoriteArtists(): Promise<string[]> {
-    
+
+  async findFavoriteArtists(): Promise<string[]> {
+    const favorites = await this.favoriteArtistsRepository.find();
+    return favorites.map((f) => f.artistId);
   }
-  findFavoriteTracks(): Promise<string[]> {
-    
+
+  async findFavoriteTracks(): Promise<string[]> {
+    const favorites = await this.favoriteTracksRepository.find();
+    return favorites.map((f) => f.trackId);
   }
-  deleteFavoriteAlbum(id: string) {
-    
+
+  async deleteFavoriteAlbum(id: string): Promise<void> {
+    await this.favoriteAlbumsRepository.delete({ albumId: id });
   }
-  deleteFavoriteArtist(id: string) {
-    
+
+  async deleteFavoriteArtist(id: string): Promise<void> {
+    await this.favoriteArtistsRepository.delete({ artistId: id });
   }
-  deleteFavoriteTrack(id: string) {
-    
+
+  async deleteFavoriteTrack(id: string): Promise<void> {
+    await this.favoriteTracksRepository.delete({ trackId: id });
   }
 }
