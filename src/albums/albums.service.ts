@@ -1,7 +1,6 @@
 import { Inject, Injectable } from '@nestjs/common';
 import { CreateAlbumDto } from './dto/create-album.dto';
 import { UpdateAlbumDto } from './dto/update-album.dto';
-// import { Database } from '../database/db/db.interface';
 import { TypeOrmDatabaseService } from '../database/typeorm/typeorm-database.service';
 
 @Injectable()
