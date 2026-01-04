@@ -49,9 +49,7 @@ export class TypeOrmDatabaseService implements Database, OnModuleInit {
       ...data,
       version: 1,
     });
-    const result = await this.userRepository.save(user);
-    debugger;
-    return result;
+    return await this.userRepository.save(user);
   }
 
   async findUser(id: string): Promise<User | null> {

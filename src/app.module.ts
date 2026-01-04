@@ -10,7 +10,6 @@ import { FavoritesModule } from './favorites/favorites.module';
 import { ConfigModule } from '@nestjs/config';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { AppDataSource } from './ormconfig';
-import { TypeOrmDatabaseService } from './database/typeorm/typeorm-database.service';
 
 @Module({
   imports: [
@@ -19,22 +18,15 @@ import { TypeOrmDatabaseService } from './database/typeorm/typeorm-database.serv
     TracksModule,
     AlbumsModule,
     FavoritesModule,
-    UsersModule,
-    ArtistsModule,
-    TracksModule,
-    AlbumsModule,
-    ConfigModule.forRoot(),
+    ConfigModule.forRoot({
+      envFilePath: '.env',
+      isGlobal: true,
+    }),
     TypeOrmModule.forRoot({
       ...AppDataSource.options,
     }),
   ],
-  controllers: [AppController, AppController, AppController],
-  providers: [
-    AppService,
-    {
-      provide: 'TypeORM',
-      useClass: TypeOrmDatabaseService,
-    },
-  ],
+  controllers: [AppController],
+  providers: [AppService],
 })
 export class AppModule {}

@@ -27,7 +27,7 @@ export class FavoritesController {
   @UseInterceptors(ClassSerializerInterceptor)
   @Post('track/:id')
   @HttpCode(201)
-  async ddTrack(@Param('id', ParseUUIDPipe) id: string) {
+  async addTrack(@Param('id', ParseUUIDPipe) id: string) {
     try {
       const result = await this.favoritesService.addTrack(id);
       if (result) {
