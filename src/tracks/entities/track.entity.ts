@@ -1,12 +1,33 @@
-export class Track {
-  id: string; // uuid v4
-  name: string;
-  artistId: string | null; // refers to Artist
-  albumId: string | null; // refers to Album
-  duration: number; // integer number
+import { FavoriteTracks } from '../../favorites/entities/favorite-tracks.entity';
+import { Album } from '../../albums/entities/album.entity';
+import { Artist } from '../../artists/entities/artist.entity';
+import {
+  Column,
+  Entity,
+  JoinColumn,
+  ManyToOne,
+  OneToOne,
+  PrimaryGeneratedColumn,
+} from 'typeorm';
 
-  constructor(partial: Partial<Track>) {
-    Object.assign(this, partial);
-    this.id = crypto.randomUUID();
-  }
+@Entity()
+export class Track {
+  @PrimaryGeneratedColumn()
+  id: string; // uuid v4
+  @Column()
+  name: string;
+  @ManyToOne(() => Artist, (artist) => artist.tracks)
+  @JoinColumn({ name: 'artistId' })
+  artist: Artist;
+  @ManyToOne(() => Album, (album) => album.tracks)
+  @JoinColumn({ name: 'albumId' })
+  album: Album;
+  @Column()
+  duration: number; // integer number
+  @Column()
+  artistId: string;
+  @Column()
+  albumId: string;
+  @OneToOne(() => FavoriteTracks, (f) => f.track)
+  favorites: FavoriteTracks;
 }

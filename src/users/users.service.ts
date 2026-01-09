@@ -1,33 +1,33 @@
 import { Inject, Injectable } from '@nestjs/common';
 import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto, UpdateUserPasswordDto } from './dto/update-user.dto';
-import { InMemoryDbService } from 'src/database/in-memory-db/in-memory-db.service';
+import { TypeOrmDatabaseService } from '../database/typeorm/typeorm-database.service';
 
 @Injectable()
 export class UsersService {
-  constructor(@Inject('DB') private db: InMemoryDbService) {}
-  create(createUserDto: CreateUserDto) {
-    const result = this.db.createUser(createUserDto);
+  constructor(@Inject('TypeORM') private db: TypeOrmDatabaseService) {}
+  async create(createUserDto: CreateUserDto) {
+    const result = await this.db.createUser(createUserDto);
     return result;
   }
 
-  findAll() {
-    const result = this.db.findAllUsers();
+  async findAll() {
+    const result = await this.db.findAllUsers();
     return result;
   }
 
-  findOne(id: string) {
-    const result = this.db.findUser(id);
+  async findOne(id: string) {
+    const result = await this.db.findUser(id);
     return result;
   }
 
-  update(id: string, updateUserDto: UpdateUserDto) {
-    const result = this.db.updateUser(id, updateUserDto);
+  async update(id: string, updateUserDto: UpdateUserDto) {
+    const result = await this.db.updateUser(id, updateUserDto);
     return result;
   }
 
-  updatePassword(id: string, updateUserDto: UpdateUserPasswordDto) {
-    const result = this.db.updateUserPassword(
+  async updatePassword(id: string, updateUserDto: UpdateUserPasswordDto) {
+    const result = await this.db.updateUserPassword(
       id,
       updateUserDto.oldPassword,
       updateUserDto.newPassword,
@@ -35,7 +35,7 @@ export class UsersService {
     return result;
   }
 
-  remove(id: string) {
-    return this.db.deleteUser(id);
+  async remove(id: string) {
+    return await this.db.deleteUser(id);
   }
 }

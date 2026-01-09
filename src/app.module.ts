@@ -7,8 +7,9 @@ import { ArtistsModule } from './artists/artists.module';
 import { TracksModule } from './tracks/tracks.module';
 import { AlbumsModule } from './albums/albums.module';
 import { FavoritesModule } from './favorites/favorites.module';
-import { InMemoryDbService } from './database/in-memory-db/in-memory-db.service';
 import { ConfigModule } from '@nestjs/config';
+import { TypeOrmModule } from '@nestjs/typeorm';
+import { AppDataSource } from './ormconfig';
 
 @Module({
   imports: [
@@ -17,20 +18,15 @@ import { ConfigModule } from '@nestjs/config';
     TracksModule,
     AlbumsModule,
     FavoritesModule,
-    UsersModule,
-    ArtistsModule,
-    TracksModule,
-    AlbumsModule,
-    ConfigModule.forRoot(),
+    ConfigModule.forRoot({
+      envFilePath: '.env',
+      isGlobal: true,
+    }),
+    TypeOrmModule.forRoot({
+      ...AppDataSource.options,
+    }),
   ],
-  controllers: [AppController, AppController, AppController],
-  providers: [
-    AppService,
-    InMemoryDbService,
-    {
-      provide: 'DB',
-      useClass: InMemoryDbService,
-    },
-  ],
+  controllers: [AppController],
+  providers: [AppService],
 })
 export class AppModule {}

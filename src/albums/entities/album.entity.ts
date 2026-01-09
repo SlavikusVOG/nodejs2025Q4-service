@@ -1,11 +1,31 @@
-export class Album {
-  id: string; // uuid v4
-  name: string;
-  year: number;
-  artistId: string | null; // refers to Artist
+import { Track } from '../../tracks/entities/track.entity';
+import { Artist } from '../../artists/entities/artist.entity';
+import {
+  Column,
+  Entity,
+  JoinColumn,
+  OneToMany,
+  OneToOne,
+  PrimaryGeneratedColumn,
+} from 'typeorm';
+import { FavoriteAlbums } from '../../favorites/entities/favorite-albums.entity';
 
-  constructor(partial: Partial<Album>) {
-    Object.assign(this, partial);
-    this.id = crypto.randomUUID();
-  }
+@Entity()
+export class Album {
+  @PrimaryGeneratedColumn()
+  id: string; // uuid v4
+  @Column()
+  name: string;
+  @Column()
+  year: number;
+  @OneToOne(() => Artist)
+  @JoinColumn({ name: 'artistId' })
+  artist: Artist;
+  @Column()
+  artistId: string;
+  @OneToMany(() => Track, (t) => t.album)
+  @JoinColumn({ name: 'albumId' })
+  tracks: Track[];
+  @OneToOne(() => FavoriteAlbums, (f) => f.album)
+  favorites: FavoriteAlbums;
 }

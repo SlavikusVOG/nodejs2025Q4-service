@@ -24,9 +24,9 @@ export class AlbumsController {
   @UseInterceptors(ClassSerializerInterceptor)
   @Post()
   @HttpCode(201)
-  create(@Body() createAlbumDto: CreateAlbumDto) {
+  async create(@Body() createAlbumDto: CreateAlbumDto) {
     try {
-      const album = this.albumsService.create(createAlbumDto);
+      const album = await this.albumsService.create(createAlbumDto);
       if (album) {
         return album;
       }
@@ -38,15 +38,15 @@ export class AlbumsController {
 
   @UseInterceptors(ClassSerializerInterceptor)
   @Get()
-  findAll() {
+  async findAll() {
     return this.albumsService.findAll();
   }
 
   @UseInterceptors(ClassSerializerInterceptor)
   @Get(':id')
-  findOne(@Param('id', ParseUUIDPipe) id: string) {
+  async findOne(@Param('id', ParseUUIDPipe) id: string) {
     try {
-      const album = this.albumsService.findOne(id);
+      const album = await this.albumsService.findOne(id);
       if (album) {
         return album;
       }
@@ -61,12 +61,12 @@ export class AlbumsController {
 
   @UseInterceptors(ClassSerializerInterceptor)
   @Put(':id')
-  update(
+  async update(
     @Param('id', ParseUUIDPipe) id: string,
     @Body() updateAlbumDto: UpdateAlbumDto,
   ) {
     try {
-      const result = this.albumsService.update(id, updateAlbumDto);
+      const result = await this.albumsService.update(id, updateAlbumDto);
       if (result) {
         return result;
       }
@@ -84,9 +84,9 @@ export class AlbumsController {
   @UseInterceptors(ClassSerializerInterceptor)
   @Delete(':id')
   @HttpCode(204)
-  remove(@Param('id', ParseUUIDPipe) id: string) {
+  async remove(@Param('id', ParseUUIDPipe) id: string) {
     try {
-      const result = this.albumsService.remove(id);
+      const result = await this.albumsService.remove(id);
       if (result) {
         return true;
       }

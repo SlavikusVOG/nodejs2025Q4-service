@@ -24,9 +24,9 @@ export class ArtistsController {
   @UseInterceptors(ClassSerializerInterceptor)
   @Post()
   @HttpCode(201)
-  create(@Body() createArtistDto: CreateArtistDto) {
+  async create(@Body() createArtistDto: CreateArtistDto) {
     try {
-      const artist = this.artistsService.create(createArtistDto);
+      const artist = await this.artistsService.create(createArtistDto);
       if (artist) {
         return artist;
       }
@@ -38,15 +38,15 @@ export class ArtistsController {
 
   @UseInterceptors(ClassSerializerInterceptor)
   @Get()
-  findAll() {
-    return this.artistsService.findAll();
+  async findAll() {
+    return await this.artistsService.findAll();
   }
 
   @UseInterceptors(ClassSerializerInterceptor)
   @Get(':id')
-  findOne(@Param('id', ParseUUIDPipe) id: string) {
+  async findOne(@Param('id', ParseUUIDPipe) id: string) {
     try {
-      const artist = this.artistsService.findOne(id);
+      const artist = await this.artistsService.findOne(id);
       if (artist) {
         return artist;
       }
@@ -61,12 +61,12 @@ export class ArtistsController {
 
   @UseInterceptors(ClassSerializerInterceptor)
   @Put(':id')
-  update(
+  async update(
     @Param('id', ParseUUIDPipe) id: string,
     @Body() updateArtistDto: UpdateArtistDto,
   ) {
     try {
-      const result = this.artistsService.update(id, updateArtistDto);
+      const result = await this.artistsService.update(id, updateArtistDto);
       if (result) {
         return result;
       }
@@ -84,9 +84,9 @@ export class ArtistsController {
   @UseInterceptors(ClassSerializerInterceptor)
   @Delete(':id')
   @HttpCode(204)
-  remove(@Param('id', ParseUUIDPipe) id: string) {
+  async remove(@Param('id', ParseUUIDPipe) id: string) {
     try {
-      const result = this.artistsService.remove(id);
+      const result = await this.artistsService.remove(id);
       if (result) {
         return true;
       }

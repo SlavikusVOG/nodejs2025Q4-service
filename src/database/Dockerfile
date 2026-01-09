@@ -1,0 +1,7 @@
+FROM postgres:18-alpine3.23
+
+ENV POSTGRES_USER=postgres
+ENV POSTGRES_PASSWORD=postgres
+ENV POSTGRES_DB=homelibrarydb
+
+EXPOSE 5432
